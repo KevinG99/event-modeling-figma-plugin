@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropertyForm from './PropertyForm';
 import JSONPreview from './JSONPreview';
+import { ActionTypes } from '../types';
 
 function EventCreator() {
   const [eventName, setEventName] = useState('');
@@ -16,11 +17,11 @@ function EventCreator() {
   };
 
   const onCreate = () => {
-    parent.postMessage({ pluginMessage: { type: 'create-event', eventName, properties } }, '*');
+    parent.postMessage({ pluginMessage: { type: ActionTypes.CreateEventStickyNote, eventName, properties } }, '*');
   };
 
   const onCreateCommands = () => {
-    parent.postMessage({ pluginMessage: { type: 'create-commands' } }, '*');
+    parent.postMessage({ pluginMessage: { type: ActionTypes.CreateCommandStickyNote } }, '*');
   };
 
   return (
