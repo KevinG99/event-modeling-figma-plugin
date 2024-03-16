@@ -4,8 +4,14 @@ export interface EventMessage {
   properties: Array<{ name: string; type: string }>;
 }
 
+export interface BulkEventMessage {
+  type: ActionTypes;
+  eventNames: string[];
+}
+
 export enum ActionTypes {
   CreateEventStickyNote = 'create-event',
+  CreateBulkEvents = 'create-bulk-events',
   CreateCommandStickyNote = 'create-commands',
 }
 

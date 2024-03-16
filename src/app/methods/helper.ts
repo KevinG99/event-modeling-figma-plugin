@@ -1,4 +1,4 @@
-import { BLUE_COLOR, COLOR_TOLERANCE,ORANGE_COLOR, CENTER_Y,CENTER_X } from '../../plugin/controller';
+import { BLUE_COLOR, COLOR_TOLERANCE,ORANGE_COLOR } from '../../plugin/controller';
 import { EventMessage } from '../types';
 
 function connectStickyNotes(sticky1: SceneNode, sticky2: SceneNode) {
@@ -19,7 +19,6 @@ export async function createCommandStickyNote(eventName: string) {
 }
 
 export async function createEventStickyNote(msg: EventMessage) {
-  console.log(msg);
   const sticky = figma.createSticky();
   await figma.loadFontAsync(sticky.text.fontName as FontName);
   sticky.fills = [{ type: 'SOLID', color: ORANGE_COLOR }];
@@ -58,8 +57,8 @@ export function moveStickyToSection(sceneNode: SceneNode, section?: SectionNode)
   if (!section) {
     section = figma.createSection();
     section.resizeWithoutConstraints(sceneNode.width + 100, sceneNode.height + 100); // Starting size, adjust as needed
-    section.x = CENTER_X;
-    section.y = CENTER_Y;
+    section.x = figma.viewport.center.x
+    section.y = figma.viewport.center.y
   }
 
   const padding = 50; // Space between stickies
@@ -105,6 +104,7 @@ export function moveStickyToSection(sceneNode: SceneNode, section?: SectionNode)
   sceneNode.y = isBlue ? padding : nextY; // If blue, place at the top with padding
 
   section.appendChild(sceneNode);
+  return section;
 }
 
 export async function getOrangeStickies() {

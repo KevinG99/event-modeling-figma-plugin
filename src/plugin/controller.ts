@@ -49,16 +49,21 @@ figma.ui.onmessage = async (msg: EventMessage | UIAction | BulkEventMessage) => 
     case ActionTypes.CreateBulkEvents:
       const existingNodes = [];
 
-      (msg as BulkEventMessage).eventNames.forEach((eventName) => {
-        createEventStickyNote({ type: ActionTypes.CreateEventStickyNote, eventName, properties: [] }).then((sticky) => {
+      const promises = (msg as BulkEventMessage).eventNames.map(eventName =>
+        createEventStickyNote({ type: ActionTypes.CreateEventStickyNote, eventName, properties: [] })
+          .then(sticky => {
             const nextPos = getNextAvailablePosition(existingNodes);
             const sectionNode = moveStickyToSection(sticky);
             sectionNode.x = nextPos.x;
             existingNodes.push(sectionNode);
-          },
-        )
+          })
+      );
+
+// Use Promise.all to wait for all promises to resolve
+      Promise.all(promises).then(() => {
+        figma.viewport.scrollAndZoomIntoView(existingNodes);
       });
-      figma.viewport.scrollAndZoomIntoView(existingNodes);
+
       break;
   }
 };
