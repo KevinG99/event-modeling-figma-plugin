@@ -14,6 +14,25 @@ export const COLOR_TOLERANCE = 0.01;
 
 figma.ui.resize(300, 600);
 
+// Introduce a function to calculate the next available position
+function getNextAvailablePosition(nodes) {
+  let maxX = 0;
+  let maxY = 0;
+
+  // Find the farthest position (max X and max Y) among existing nodes
+  nodes.forEach(node => {
+    if (node.x + node.width > maxX) {
+      maxX = node.x + node.width;
+    }
+    if (node.y + node.height > maxY) {
+      maxY = node.y + node.height;
+    }
+  });
+
+  // Return the next position slightly offset from the max found
+  return { x: maxX + 10, y: maxY + 10 };
+}
+
 figma.ui.onmessage = async (msg: EventMessage | UIAction | BulkEventMessage) => {
   switch (msg.type) {
     case ActionTypes.CreateEventStickyNote:
@@ -28,16 +47,18 @@ figma.ui.onmessage = async (msg: EventMessage | UIAction | BulkEventMessage) => 
       });
       break;
     case ActionTypes.CreateBulkEvents:
-      const nodes = [];
+      const existingNodes = [];
+
       (msg as BulkEventMessage).eventNames.forEach((eventName) => {
         createEventStickyNote({ type: ActionTypes.CreateEventStickyNote, eventName, properties: [] }).then((sticky) => {
+            const nextPos = getNextAvailablePosition(existingNodes);
             const sectionNode = moveStickyToSection(sticky);
-            nodes.push(sectionNode);
-            figma.currentPage.appendChild(sectionNode);
+            sectionNode.x = nextPos.x;
+            existingNodes.push(sectionNode);
           },
-        );
+        )
       });
-      figma.viewport.scrollAndZoomIntoView(nodes);
+      figma.viewport.scrollAndZoomIntoView(existingNodes);
       break;
   }
 };
