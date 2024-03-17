@@ -2,14 +2,22 @@ import {
   createCommandSection,
   createEventStickyNote,
   getOrangeStickies,
+  isColorMatch,
   moveStickyToSection,
 } from '../app/methods/helper';
-import { EventMessage, ActionTypes, UIAction, BulkEventMessage } from '../app/types';
+import {
+  EventMessage,
+  ActionTypes,
+  UIAction,
+  BulkEventMessage,
+  StickyDetailsMessage, StickyType,
+} from '../app/types';
 
 figma.showUI(__html__);
 
 export const ORANGE_COLOR = { r: 1, g: 0.647, b: 0 };
 export const BLUE_COLOR = { r: 0.529, g: 0.808, b: 0.922 };
+export const GREEN_COLOR = { r: 0.529, g: 0.922, b: 0.808 };
 export const COLOR_TOLERANCE = 0.01;
 
 figma.ui.resize(300, 600);
@@ -33,7 +41,26 @@ function getNextAvailablePosition(nodes) {
   return { x: maxX + 10, y: maxY + 10 };
 }
 
-figma.ui.onmessage = async (msg: EventMessage | UIAction | BulkEventMessage) => {
+figma.on('selectionchange', () => {
+  const nodes = figma.currentPage.selection;
+  if (nodes.length === 1 && nodes[0].type === 'STICKY') {
+    let stickyNode = nodes[0];
+    if (isColorMatch(stickyNode.fills[0].color, ORANGE_COLOR)) {
+      figma.ui.postMessage({ type: ActionTypes.StickyNoteSelected, stickyType: StickyType.Event, stickyNode });
+    } else if (isColorMatch(stickyNode.fills[0].color, BLUE_COLOR)) {
+      figma.ui.postMessage({ type: ActionTypes.StickyNoteSelected, stickyType: StickyType.Command, stickyNode });
+    } else if (isColorMatch(stickyNode.fills[0].color, GREEN_COLOR)) {
+      figma.ui.postMessage({ type: ActionTypes.StickyNoteSelected, stickyType: StickyType.View, stickyNode });
+    }
+  } else if(nodes.length === 0 && nodes[0].type === 'SECTION') {
+    figma.ui.postMessage({ type: ActionTypes.SectionSelected, sectionNode: nodes[0]});
+  }else{
+    figma.ui.postMessage({ type: ActionTypes.NothingSelected });
+
+  }
+});
+
+figma.ui.onmessage = async (msg: EventMessage | UIAction | BulkEventMessage | StickyDetailsMessage) => {
   switch (msg.type) {
     case ActionTypes.CreateEventStickyNote:
       await createEventStickyNote(<EventMessage>msg).then((sticky) => {
@@ -46,6 +73,12 @@ figma.ui.onmessage = async (msg: EventMessage | UIAction | BulkEventMessage) => 
         stickies.forEach((sticky) => createCommandSection(sticky));
       });
       break;
+    case ActionTypes.StickyNoteSelected:
+      break;
+    case ActionTypes.NothingSelected:
+      break;
+    case ActionTypes.SectionSelected:
+      break;
     case ActionTypes.CreateBulkEvents:
       const existingNodes = [];
 
@@ -56,10 +89,9 @@ figma.ui.onmessage = async (msg: EventMessage | UIAction | BulkEventMessage) => 
             const sectionNode = moveStickyToSection(sticky);
             sectionNode.x = nextPos.x;
             existingNodes.push(sectionNode);
-          })
+          }),
       );
 
-// Use Promise.all to wait for all promises to resolve
       Promise.all(promises).then(() => {
         figma.viewport.scrollAndZoomIntoView(existingNodes);
       });
