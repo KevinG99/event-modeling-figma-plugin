@@ -33,7 +33,7 @@ export async function createEventStickyNote(msg: EventMessage) {
   return sticky;
 }
 
-function isColorMatch(color1: RGB, color2: RGB): boolean {
+export function isColorMatch(color1: RGB, color2: RGB): boolean {
   return (
     Math.abs(color1.r - color2.r) <= COLOR_TOLERANCE &&
     Math.abs(color1.g - color2.g) <= COLOR_TOLERANCE &&
@@ -57,6 +57,8 @@ export function moveStickyToSection(sceneNode: SceneNode, section?: SectionNode)
   if (!section) {
     section = figma.createSection();
     section.resizeWithoutConstraints(sceneNode.width + 100, sceneNode.height + 100); // Starting size, adjust as needed
+    console.log(sceneNode.name);
+    section.name = createSliceName(sceneNode.name);
     section.x = figma.viewport.center.x
     section.y = figma.viewport.center.y
   }
@@ -127,4 +129,7 @@ function isCommandStickyNote(sticky: StickyNode): boolean {
     sticky.fills.length > 0 &&
     isColorMatch((sticky.fills as SolidPaint[])[0].color, BLUE_COLOR)
   );
+}
+function createSliceName(name: string): string {
+  return `slice: ${name}`;
 }
