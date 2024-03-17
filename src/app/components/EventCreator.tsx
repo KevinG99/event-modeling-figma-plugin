@@ -20,9 +20,6 @@ function EventCreator() {
     parent.postMessage({ pluginMessage: { type: ActionTypes.CreateEventStickyNote, eventName, properties } }, '*');
   };
 
-  const onCreateCommands = () => {
-    parent.postMessage({ pluginMessage: { type: ActionTypes.CreateCommandStickyNote } }, '*');
-  };
 
   return (
     <div>
@@ -38,7 +35,6 @@ function EventCreator() {
       <JSONPreview eventName={eventName} properties={properties} />
       <button onClick={onCreate}>Create</button>
       <button onClick={clearEverything}>Cancel</button>
-      <button onClick={onCreateCommands}>Create Commands</button>
     </div>
   );
 }

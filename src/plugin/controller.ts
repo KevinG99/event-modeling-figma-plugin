@@ -43,6 +43,7 @@ function getNextAvailablePosition(nodes) {
 
 figma.on('selectionchange', () => {
   const nodes = figma.currentPage.selection;
+  const allElements = figma.currentPage.children;
   if (nodes.length === 1 && nodes[0].type === 'STICKY') {
     let stickyNode = nodes[0];
     if (isColorMatch(stickyNode.fills[0].color, ORANGE_COLOR)) {
@@ -52,11 +53,10 @@ figma.on('selectionchange', () => {
     } else if (isColorMatch(stickyNode.fills[0].color, GREEN_COLOR)) {
       figma.ui.postMessage({ type: ActionTypes.StickyNoteSelected, stickyType: StickyType.View, stickyNode });
     }
-  } else if(nodes.length === 0 && nodes[0].type === 'SECTION') {
-    figma.ui.postMessage({ type: ActionTypes.SectionSelected, sectionNode: nodes[0]});
-  }else{
-    figma.ui.postMessage({ type: ActionTypes.NothingSelected });
-
+  } else if (nodes.length === 1 && nodes[0].type === 'SECTION') {
+    figma.ui.postMessage({ type: ActionTypes.SectionSelected, sectionNode: nodes[0] });
+  } else {
+    figma.ui.postMessage({ type: ActionTypes.NothingSelected, allElements });
   }
 });
 
@@ -93,6 +93,7 @@ figma.ui.onmessage = async (msg: EventMessage | UIAction | BulkEventMessage | St
       );
 
       Promise.all(promises).then(() => {
+        //zoom into a nice view where the nodes are centered and not super zoomed in
         figma.viewport.scrollAndZoomIntoView(existingNodes);
       });
 

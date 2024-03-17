@@ -1,45 +1,40 @@
-import React from 'react';
-import logo from '../assets/logo.svg';
-import '../styles/ui.css';
+import React, { useState } from 'react';
+import BulkEventCreator from './BulkEventCreator';
+import EventCreator from './EventCreator';
+import EventDetails from './EventDetails';
+import { ActionTypes } from '../types';
 
 function App() {
-  const textbox = React.useRef<HTMLInputElement>(undefined);
-
-  const countRef = React.useCallback((element: HTMLInputElement) => {
-    if (element) element.value = '5';
-    textbox.current = element;
-  }, []);
-
-  const onCreate = () => {
-    const count = parseInt(textbox.current.value, 10);
-    parent.postMessage({ pluginMessage: { type: 'create-rectangles', count } }, '*');
+  const [activeComponent, setActiveComponent] = useState(null);
+  const renderComponent = () => {
+    switch (activeComponent) {
+      case 'BulkEventCreator':
+        return <BulkEventCreator />;
+      case 'EventCreator':
+        return <EventCreator />;
+      case 'EventDetails':
+        return <EventDetails />;
+      default:
+        return <div>Select a component from the menu</div>;
+    }
   };
-
-  const onCancel = () => {
-    parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
+  const onCreateCommands = () => {
+    parent.postMessage({ pluginMessage: { type: ActionTypes.CreateCommandStickyNote } }, '*');
   };
-
-  React.useEffect(() => {
-    // This is how we read messages sent from the plugin controller
-    window.onmessage = (event) => {
-      const { type, message } = event.data.pluginMessage;
-      if (type === 'create-rectangles') {
-        console.log(`Figma Says: ${message}`);
-      }
-    };
-  }, []);
 
   return (
     <div>
-      <img src={logo} />
-      <h2>Rectangle Creator</h2>
-      <p>
-        Count: <input ref={countRef} />
-      </p>
-      <button id="create" onClick={onCreate}>
-        Create
-      </button>
-      <button onClick={onCancel}>Cancel</button>
+      <nav>
+        <button onClick={() => setActiveComponent('BulkEventCreator')}>
+          Bulk Event Creator
+        </button>
+        <button onClick={() => setActiveComponent('EventCreator')}>
+          Event Creator
+        </button>
+        <button onClick={onCreateCommands}>Create Commands</button>
+
+      </nav>
+      {renderComponent()}
     </div>
   );
 }

@@ -12,27 +12,50 @@ document.addEventListener('DOMContentLoaded', function() {
   const container = document.getElementById('react-page');
   const root = createRoot(container);
   window.onmessage = (event) => {
-    let msg = event.data.pluginMessage;
+    const msg = event.data.pluginMessage;
     if (msg) {
-      if (msg.type === ActionTypes.StickyNoteSelected) {
-        if (msg.stickyType === StickyType.Event) {
-          root.render(<EventDetails />);
-        } else if (msg.stickyType === StickyType.Command) {
-          root.render(<CommandDetails />);
-        } else if (msg.stickyType === StickyType.View) {
-          root.render(<ViewDetails />);
-        }
-      } else if (msg.type === ActionTypes.NothingSelected) {
-        root.render(<App />);
-      } else if (msg.type === ActionTypes.SectionSelected) {
-        root.render(<SectionDetails />);
-      }
-      if (msg.type === ActionTypes.VerifyEventModel) {
-        console.log('Verifying event model.');
-        root.render(<><VerifyEventModel {...msg} /><App /></>);
-      }
+      renderComponent(msg, root);
+      console.log(msg);
     }
   };
-  root.render(<App />);
+  root.render(
+    <>
+      <VerifyEventModel />
+      <App />
+    </>,
+  );
 });
 
+
+function renderComponent(msg, root) {
+  switch (msg.type) {
+    case ActionTypes.StickyNoteSelected:
+      switch (msg.stickyType) {
+        case StickyType.Event:
+          root.render(<EventDetails />);
+          break;
+        case StickyType.Command:
+          root.render(<CommandDetails />);
+          break;
+        case StickyType.View:
+          root.render(<ViewDetails />);
+          break;
+        default:
+          break;
+      }
+      break;
+    case ActionTypes.NothingSelected:
+      root.render(
+        <>
+          <VerifyEventModel {...msg} />
+          <App />
+        </>,
+      );
+      break;
+    case ActionTypes.SectionSelected:
+      root.render(<SectionDetails />);
+      break;
+    default:
+      break;
+  }
+}
