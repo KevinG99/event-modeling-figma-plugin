@@ -10,7 +10,7 @@ interface EventProperty {
 function EventDetails({ characters }: { characters: string }): JSX.Element {
   const [eventName, setEventName] = useState('');
   const [propertiesText, setPropertiesText] = useState('');
-  const [editMode, setEditMode] = useState(true); // Edit mode by default
+  const [isExpertMode, setIsExpertMode] = useState(false); // Use state for checkbox
   const [newPropertyName, setNewPropertyName] = useState('');
   const [newPropertyType, setNewPropertyType] = useState('');
 
@@ -36,7 +36,10 @@ function EventDetails({ characters }: { characters: string }): JSX.Element {
   };
 
   const handleUpdate = () => {
-    dispatch(ActionTypes.UpdateEventStickyNote, { oldContent: characters, newContent: `${eventName}\n---------\n${propertiesText}` });
+    dispatch(ActionTypes.UpdateEventStickyNote, {
+      oldContent: characters,
+      newContent: `${eventName}\n---------\n${propertiesText}`,
+    });
   };
 
   const removeProperty = (index: number) => {
@@ -69,14 +72,21 @@ function EventDetails({ characters }: { characters: string }): JSX.Element {
         <input type="text" id="eventName" value={eventName} onChange={handleEventNameChange} />
       </div>
       <div>
-        <label htmlFor="properties">Properties:</label>
-        <textarea id="properties" value={propertiesText} onChange={handlePropertiesChange} rows={5} />
-        <button onClick={() => setEditMode(!editMode)}>
-          {editMode ? 'Normal Mode' : 'Expert Mode'}
-        </button>
+        {isExpertMode && (
+          <div>
+            <label htmlFor="properties">Properties:</label>
+            <textarea id="properties" value={propertiesText} onChange={handlePropertiesChange} rows={5}
+                      disabled={!isExpertMode} />
+          </div>
+        )}
+        <label htmlFor="isExpertMode">
+          <input type="checkbox" id="isExpertMode" checked={isExpertMode}
+                 onChange={(event) => setIsExpertMode(event.target.checked)} />
+          Expert Mode
+        </label>
       </div>
-      {editMode && (
-        <div>
+      {!isExpertMode && (
+        <form onSubmit={addNewProperty}>
           <ul>
             {parseProperties(propertiesText).map((prop, index) => (
               <li key={index}>
@@ -86,13 +96,15 @@ function EventDetails({ characters }: { characters: string }): JSX.Element {
             ))}
           </ul>
           <div>
-            <input type="text" placeholder="New Property Name" value={newPropertyName} onChange={handleNewPropertyNameChange} />
-            <input type="text" placeholder="New Property Type" value={newPropertyType} onChange={handleNewPropertyTypeChange} />
-            <button onClick={addNewProperty}>Add Property</button>
+            <input type="text" placeholder="New Property Name" value={newPropertyName}
+                   onChange={handleNewPropertyNameChange} />
+            <input type="text" placeholder="New Property Type" value={newPropertyType}
+                   onChange={handleNewPropertyTypeChange} />
+            <button type={'submit'} onClick={addNewProperty}>Add Property</button>
           </div>
-        </div>
+        </form>
       )}
-      <button onClick={handleUpdate}>Update Event</button>
+      <button onClick={handleUpdate}>Update</button>
     </div>
   );
 }
