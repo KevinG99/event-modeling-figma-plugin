@@ -8,10 +8,10 @@ import {
 import {
   EventMessage,
   ActionTypes,
-  UIAction,
   BulkEventMessage,
-  StickyDetailsMessage, StickyType,
+  StickyType,
 } from '../app/types';
+import { dispatch, handleEvent } from '../app/methods/codeMessageHandler';
 
 figma.showUI(__html__);
 
@@ -41,62 +41,64 @@ function getNextAvailablePosition(nodes) {
   return { x: maxX + 10, y: maxY + 10 };
 }
 
-figma.on('selectionchange', () => {
+function handleStickyNoteSelection(stickyNode: StickyNode) {
+  let characters = stickyNode.text.characters;
+  if (isColorMatch(stickyNode.fills[0].color, ORANGE_COLOR)) {
+    figma.ui.postMessage({ type: ActionTypes.StickyNoteSelected, stickyType: StickyType.Event, characters, stickyNode });
+  } else if (isColorMatch(stickyNode.fills[0].color, BLUE_COLOR)) {
+    figma.ui.postMessage({ type: ActionTypes.StickyNoteSelected, stickyType: StickyType.Command, stickyNode });
+  } else if (isColorMatch(stickyNode.fills[0].color, GREEN_COLOR)) {
+    figma.ui.postMessage({ type: ActionTypes.StickyNoteSelected, stickyType: StickyType.View, stickyNode });
+  }
+}
+
+function handleSelectionChange() {
   const nodes = figma.currentPage.selection;
   const allElements = figma.currentPage.children;
   if (nodes.length === 1 && nodes[0].type === 'STICKY') {
-    let stickyNode = nodes[0];
-    if (isColorMatch(stickyNode.fills[0].color, ORANGE_COLOR)) {
-      figma.ui.postMessage({ type: ActionTypes.StickyNoteSelected, stickyType: StickyType.Event, stickyNode });
-    } else if (isColorMatch(stickyNode.fills[0].color, BLUE_COLOR)) {
-      figma.ui.postMessage({ type: ActionTypes.StickyNoteSelected, stickyType: StickyType.Command, stickyNode });
-    } else if (isColorMatch(stickyNode.fills[0].color, GREEN_COLOR)) {
-      figma.ui.postMessage({ type: ActionTypes.StickyNoteSelected, stickyType: StickyType.View, stickyNode });
-    }
+    const stickyNode = nodes[0];
+    handleStickyNoteSelection(stickyNode);
   } else if (nodes.length === 1 && nodes[0].type === 'SECTION') {
-    figma.ui.postMessage({ type: ActionTypes.SectionSelected, sectionNode: nodes[0] });
+    dispatch(ActionTypes.SectionSelected, nodes[0]);
   } else {
-    figma.ui.postMessage({ type: ActionTypes.NothingSelected, allElements });
+    dispatch(ActionTypes.NothingSelected, { allElements });
   }
-});
+}
 
-figma.ui.onmessage = async (msg: EventMessage | UIAction | BulkEventMessage | StickyDetailsMessage) => {
-  switch (msg.type) {
-    case ActionTypes.CreateEventStickyNote:
-      await createEventStickyNote(<EventMessage>msg).then((sticky) => {
+figma.on('selectionchange', handleSelectionChange);
+
+
+handleEvent(ActionTypes.CreateEventStickyNote, handleCreateEventStickyNote);
+handleEvent(ActionTypes.CreateCommandStickyNote, handleCreateCommandStickyNote);
+handleEvent(ActionTypes.CreateBulkEvents, handleCreateBulkEvents);
+
+function handleCreateEventStickyNote(msg: EventMessage) {
+  createEventStickyNote(msg).then((sticky) => {
+    const sectionNode = moveStickyToSection(sticky);
+    figma.viewport.scrollAndZoomIntoView([sectionNode]);
+  });
+}
+
+function handleCreateCommandStickyNote() {
+  getOrangeStickies().then((stickies) => {
+    stickies.forEach((sticky) => createCommandSection(sticky));
+  });
+}
+
+function handleCreateBulkEvents(msg: BulkEventMessage) {
+  const existingNodes = [];
+
+  const promises = msg.eventNames.map(eventName =>
+    createEventStickyNote({ type: ActionTypes.CreateEventStickyNote, eventName, properties: [] })
+      .then(sticky => {
+        const nextPos = getNextAvailablePosition(existingNodes);
         const sectionNode = moveStickyToSection(sticky);
-        figma.viewport.scrollAndZoomIntoView([sectionNode]);
-      });
-      break;
-    case ActionTypes.CreateCommandStickyNote:
-      await getOrangeStickies().then((stickies) => {
-        stickies.forEach((sticky) => createCommandSection(sticky));
-      });
-      break;
-    case ActionTypes.StickyNoteSelected:
-      break;
-    case ActionTypes.NothingSelected:
-      break;
-    case ActionTypes.SectionSelected:
-      break;
-    case ActionTypes.CreateBulkEvents:
-      const existingNodes = [];
+        sectionNode.x = nextPos.x;
+        existingNodes.push(sectionNode);
+      })
+  );
 
-      const promises = (msg as BulkEventMessage).eventNames.map(eventName =>
-        createEventStickyNote({ type: ActionTypes.CreateEventStickyNote, eventName, properties: [] })
-          .then(sticky => {
-            const nextPos = getNextAvailablePosition(existingNodes);
-            const sectionNode = moveStickyToSection(sticky);
-            sectionNode.x = nextPos.x;
-            existingNodes.push(sectionNode);
-          }),
-      );
-
-      Promise.all(promises).then(() => {
-        //zoom into a nice view where the nodes are centered and not super zoomed in
-        figma.viewport.scrollAndZoomIntoView(existingNodes);
-      });
-
-      break;
-  }
-};
+  Promise.all(promises).then(() => {
+    figma.viewport.scrollAndZoomIntoView(existingNodes);
+  });
+}
