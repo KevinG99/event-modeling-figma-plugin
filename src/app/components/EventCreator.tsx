@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropertyForm from './PropertyForm';
 import JSONPreview from './JSONPreview';
 import { ActionTypes } from '../types';
+import { dispatch } from '../methods/uiMessageHandler';
 
 function EventCreator() {
   const [eventName, setEventName] = useState('');
@@ -17,7 +18,7 @@ function EventCreator() {
   };
 
   const onCreate = () => {
-    parent.postMessage({ pluginMessage: { type: ActionTypes.CreateEventStickyNote, eventName, properties } }, '*');
+    dispatch(ActionTypes.CreateEventStickyNote, { eventName, properties });
   };
 
 

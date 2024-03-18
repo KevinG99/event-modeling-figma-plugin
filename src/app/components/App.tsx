@@ -3,8 +3,9 @@ import BulkEventCreator from './BulkEventCreator';
 import EventCreator from './EventCreator';
 import EventDetails from './EventDetails';
 import { ActionTypes } from '../types';
+import { dispatch } from '../methods/uiMessageHandler';
 
-function App() {
+function App(msg) {
   const [activeComponent, setActiveComponent] = useState(null);
   const renderComponent = () => {
     switch (activeComponent) {
@@ -13,13 +14,13 @@ function App() {
       case 'EventCreator':
         return <EventCreator />;
       case 'EventDetails':
-        return <EventDetails />;
+        return <EventDetails {...msg} />;
       default:
         return <div>Select a component from the menu</div>;
     }
   };
   const onCreateCommands = () => {
-    parent.postMessage({ pluginMessage: { type: ActionTypes.CreateCommandStickyNote } }, '*');
+    dispatch(ActionTypes.CreateCommandStickyNote)
   };
 
   return (

@@ -28,11 +28,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function renderComponent(msg, root) {
-  switch (msg.type) {
+  switch (msg.action) {
     case ActionTypes.StickyNoteSelected:
-      switch (msg.stickyType) {
+      switch (msg.data.stickyType) {
         case StickyType.Event:
-          root.render(<EventDetails />);
+          root.render(<EventDetails {...msg}/>);
           break;
         case StickyType.Command:
           root.render(<CommandDetails />);

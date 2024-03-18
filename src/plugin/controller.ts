@@ -1,17 +1,11 @@
 import {
-  createCommandSection,
-  createEventStickyNote,
-  getOrangeStickies,
-  isColorMatch,
-  moveStickyToSection,
-} from '../app/methods/helper';
-import {
-  EventMessage,
   ActionTypes,
-  BulkEventMessage,
   StickyType,
 } from '../app/types';
 import { dispatch, handleEvent } from '../app/methods/codeMessageHandler';
+import handleCreateEventStickyNote from '../app/methods/createEvent';
+import handleCreateCommandStickyNote from '../app/methods/commandCreation';
+import handleCreateBulkEvents from '../app/methods/bulkEvents';
 
 figma.showUI(__html__);
 
@@ -22,33 +16,22 @@ export const COLOR_TOLERANCE = 0.01;
 
 figma.ui.resize(300, 600);
 
-// Introduce a function to calculate the next available position
-function getNextAvailablePosition(nodes) {
-  let maxX = 0;
-  let maxY = 0;
-
-  // Find the farthest position (max X and max Y) among existing nodes
-  nodes.forEach(node => {
-    if (node.x + node.width > maxX) {
-      maxX = node.x + node.width;
-    }
-    if (node.y + node.height > maxY) {
-      maxY = node.y + node.height;
-    }
-  });
-
-  // Return the next position slightly offset from the max found
-  return { x: maxX + 10, y: maxY + 10 };
+export function isColorMatch(color1: RGB, color2: RGB): boolean {
+  return (
+    Math.abs(color1.r - color2.r) <= COLOR_TOLERANCE &&
+    Math.abs(color1.g - color2.g) <= COLOR_TOLERANCE &&
+    Math.abs(color1.b - color2.b) <= COLOR_TOLERANCE
+  );
 }
 
 function handleStickyNoteSelection(stickyNode: StickyNode) {
   let characters = stickyNode.text.characters;
   if (isColorMatch(stickyNode.fills[0].color, ORANGE_COLOR)) {
-    figma.ui.postMessage({ type: ActionTypes.StickyNoteSelected, stickyType: StickyType.Event, characters, stickyNode });
+    dispatch(ActionTypes.StickyNoteSelected, { stickyType: StickyType.Event, characters, stickyNode })
   } else if (isColorMatch(stickyNode.fills[0].color, BLUE_COLOR)) {
-    figma.ui.postMessage({ type: ActionTypes.StickyNoteSelected, stickyType: StickyType.Command, stickyNode });
+    dispatch(ActionTypes.StickyNoteSelected, { stickyType: StickyType.Command, characters, stickyNode });
   } else if (isColorMatch(stickyNode.fills[0].color, GREEN_COLOR)) {
-    figma.ui.postMessage({ type: ActionTypes.StickyNoteSelected, stickyType: StickyType.View, stickyNode });
+    dispatch(ActionTypes.StickyNoteSelected, { stickyType: StickyType.View, characters, stickyNode });
   }
 }
 
@@ -72,33 +55,5 @@ handleEvent(ActionTypes.CreateEventStickyNote, handleCreateEventStickyNote);
 handleEvent(ActionTypes.CreateCommandStickyNote, handleCreateCommandStickyNote);
 handleEvent(ActionTypes.CreateBulkEvents, handleCreateBulkEvents);
 
-function handleCreateEventStickyNote(msg: EventMessage) {
-  createEventStickyNote(msg).then((sticky) => {
-    const sectionNode = moveStickyToSection(sticky);
-    figma.viewport.scrollAndZoomIntoView([sectionNode]);
-  });
-}
 
-function handleCreateCommandStickyNote() {
-  getOrangeStickies().then((stickies) => {
-    stickies.forEach((sticky) => createCommandSection(sticky));
-  });
-}
 
-function handleCreateBulkEvents(msg: BulkEventMessage) {
-  const existingNodes = [];
-
-  const promises = msg.eventNames.map(eventName =>
-    createEventStickyNote({ type: ActionTypes.CreateEventStickyNote, eventName, properties: [] })
-      .then(sticky => {
-        const nextPos = getNextAvailablePosition(existingNodes);
-        const sectionNode = moveStickyToSection(sticky);
-        sectionNode.x = nextPos.x;
-        existingNodes.push(sectionNode);
-      })
-  );
-
-  Promise.all(promises).then(() => {
-    figma.viewport.scrollAndZoomIntoView(existingNodes);
-  });
-}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ActionTypes } from '../types';
+import { dispatch } from '../methods/uiMessageHandler';
 
 const BulkEventCreator = () => {
   const [eventText, setEventText] = useState('');
@@ -15,12 +16,7 @@ const BulkEventCreator = () => {
     // For each eventName, send a message to the Figma API
     // Here we are not sending properties for simplicity
     // You would modify this to include any other necessary data
-    parent.postMessage({
-      pluginMessage: {
-        type: ActionTypes.CreateBulkEvents,
-        eventNames,
-      },
-    }, '*');
+    dispatch(ActionTypes.CreateBulkEvents, { eventNames });
 
     // Clear the textarea after publishing
     setEventText('');
