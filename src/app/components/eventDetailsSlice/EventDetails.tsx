@@ -7,11 +7,12 @@ interface EventProperty {
   type: string;
 }
 
-
 function EventDetails({ characters }: { characters: string }): JSX.Element {
   const [eventName, setEventName] = useState('');
   const [propertiesText, setPropertiesText] = useState('');
   const [editMode, setEditMode] = useState(true); // Edit mode by default
+  const [newPropertyName, setNewPropertyName] = useState('');
+  const [newPropertyType, setNewPropertyType] = useState('');
 
   useEffect(() => {
     const lines = characters.split('\n');
@@ -35,13 +36,30 @@ function EventDetails({ characters }: { characters: string }): JSX.Element {
   };
 
   const handleUpdate = () => {
-    dispatch(ActionTypes.UpdateEventStickyNote, {oldContent: characters,  newContent: `${eventName}\n---------\n${propertiesText}` });
+    dispatch(ActionTypes.UpdateEventStickyNote, { oldContent: characters, newContent: `${eventName}\n---------\n${propertiesText}` });
   };
 
   const removeProperty = (index: number) => {
     const newProperties = [...parseProperties(propertiesText)];
     newProperties.splice(index, 1);
     setPropertiesText(newProperties.map((prop) => `${prop.name}: ${prop.type}`).join('\n'));
+  };
+
+  const handleNewPropertyNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewPropertyName(event.target.value);
+  };
+
+  const handleNewPropertyTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewPropertyType(event.target.value);
+  };
+
+  const addNewProperty = () => {
+    if (!newPropertyName || !newPropertyType) return;
+    const newProperties = [...parseProperties(propertiesText)];
+    newProperties.push({ name: newPropertyName, type: newPropertyType });
+    setPropertiesText(newProperties.map((prop) => `${prop.name}: ${prop.type}`).join('\n'));
+    setNewPropertyName('');
+    setNewPropertyType('');
   };
 
   return (
@@ -67,7 +85,11 @@ function EventDetails({ characters }: { characters: string }): JSX.Element {
               </li>
             ))}
           </ul>
-          <input type="text" placeholder="Add new property" />
+          <div>
+            <input type="text" placeholder="New Property Name" value={newPropertyName} onChange={handleNewPropertyNameChange} />
+            <input type="text" placeholder="New Property Type" value={newPropertyType} onChange={handleNewPropertyTypeChange} />
+            <button onClick={addNewProperty}>Add Property</button>
+          </div>
         </div>
       )}
       <button onClick={handleUpdate}>Update Event</button>
