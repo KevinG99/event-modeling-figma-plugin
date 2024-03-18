@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
 import { dispatch } from '../../methods/uiMessageHandler';
 import { ActionTypes } from '../../types';
+import { handleEvent } from '../../methods/codeMessageHandler';
 
+handleEvent(ActionTypes.UpdateEventStickyNote, ({ stickyNode, newContent }) => {
+  const stickyName = stickyNode.name;
+  const allStickyNodes = figma.currentPage.findAll((node) => node.type === 'STICKY' && node.name === stickyName);
+
+  for (const node of allStickyNodes) {
+    let stickyNode = node as StickyNode
+    stickyNode.text.characters = newContent;
+  }
+})
 
 function EventDetails({ characters, stickyNode }) {
   const [content, setContent] = useState(characters);

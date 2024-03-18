@@ -1,7 +1,8 @@
-import { handleEvent } from '../../methods/uiMessageHandler';
-import { ActionTypes } from '../../types';
+export default handleUpdateEventStickyNote
 
-handleEvent(ActionTypes.UpdateEventStickyNote, ({ stickyNode, newContent }) => {
+
+function handleUpdateEventStickyNote({ stickyNode, newContent }) {
+  console.log('handleUpdateEventStickyNote', stickyNode, newContent);
   const stickyName = stickyNode.name;
   const allStickyNodes = figma.currentPage.findAll((node) => node.type === 'STICKY' && node.name === stickyName);
 
@@ -9,4 +10,4 @@ handleEvent(ActionTypes.UpdateEventStickyNote, ({ stickyNode, newContent }) => {
     let stickyNode = node as StickyNode
     stickyNode.text.characters = newContent;
   }
-});
+}

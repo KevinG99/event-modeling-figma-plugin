@@ -1,6 +1,6 @@
-import { createEventStickyNote } from '../EventCreationSlice/createEvent';
 import { ActionTypes, BulkEventMessage } from '../../types';
 import { moveStickyToSection } from '../../methods/sliceAndSections';
+import { createEventStickyNote } from '../eventCreationSlice/createEvent';
 
 export default handleCreateBulkEvents
 function handleCreateBulkEvents(msg: BulkEventMessage) {

@@ -3,9 +3,10 @@ import {
   StickyType,
 } from '../app/types';
 import { dispatch, handleEvent } from '../app/methods/codeMessageHandler';
-import handleCreateEventStickyNote from '../app/components/EventCreationSlice/createEvent';
-import handleCreateCommandStickyNote from '../app/components/CommandCreationSlice/commandCreation';
-import handleCreateBulkEvents from '../app/components/BulkDataSlice/bulkEvents';
+import handleUpdateEventStickyNote from '../app/components/eventDetailsSlice/updateEvents';
+import handleCreateEventStickyNote from '../app/components/eventCreationSlice/createEvent';
+import handleCreateCommandStickyNote from '../app/components/commandCreationSlice/commandCreation';
+import handleCreateBulkEvents from '../app/components/bulkDataSlice/bulkEvents';
 
 figma.showUI(__html__);
 
@@ -54,6 +55,7 @@ figma.on('selectionchange', handleSelectionChange);
 handleEvent(ActionTypes.CreateEventStickyNote, handleCreateEventStickyNote);
 handleEvent(ActionTypes.CreateCommandStickyNote, handleCreateCommandStickyNote);
 handleEvent(ActionTypes.CreateBulkEvents, handleCreateBulkEvents);
+handleEvent(ActionTypes.UpdateEventStickyNote, handleUpdateEventStickyNote);
 
 
 
