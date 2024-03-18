@@ -72,26 +72,28 @@ function EventDetails({ characters }: { characters: string }): JSX.Element {
         <input type="text" id="eventName" value={eventName} onChange={handleEventNameChange} />
       </div>
       <div>
-        {isExpertMode && (
-          <div>
-            <label htmlFor="properties">Properties:</label>
-            <textarea id="properties" value={propertiesText} onChange={handlePropertiesChange} rows={5}
-                      disabled={!isExpertMode} />
-          </div>
-        )}
         <label htmlFor="isExpertMode">
           <input type="checkbox" id="isExpertMode" checked={isExpertMode}
                  onChange={(event) => setIsExpertMode(event.target.checked)} />
           Expert Mode
         </label>
       </div>
+      {isExpertMode && (
+        <div>
+          <label htmlFor="properties">Properties:</label>
+          <textarea id="properties" value={propertiesText} onChange={handlePropertiesChange} rows={5} />
+        </div>
+      )}
       {!isExpertMode && (
-        <form onSubmit={addNewProperty}>
+        <form onSubmit={(event) => {
+          event.preventDefault();
+          addNewProperty();
+        }}>
           <ul>
             {parseProperties(propertiesText).map((prop, index) => (
               <li key={index}>
                 {prop.name}: {prop.type}
-                <button onClick={() => removeProperty(index)}>Remove</button>
+                <button type="button" onClick={() => removeProperty(index)}>Remove</button>
               </li>
             ))}
           </ul>
@@ -100,7 +102,7 @@ function EventDetails({ characters }: { characters: string }): JSX.Element {
                    onChange={handleNewPropertyNameChange} />
             <input type="text" placeholder="New Property Type" value={newPropertyType}
                    onChange={handleNewPropertyTypeChange} />
-            <button type={'submit'} onClick={addNewProperty}>Add Property</button>
+            <button type="submit">Add Property</button>
           </div>
         </form>
       )}
