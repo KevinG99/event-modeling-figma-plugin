@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import BulkEventCreator from './BulkEventCreator';
-import EventCreator from './EventCreator';
-import EventDetails from './EventDetails';
-import { ActionTypes } from '../types';
-import { dispatch } from '../methods/uiMessageHandler';
+import BulkEventCreator from './components/bulkDataSlice/BulkEventCreator';
+import EventCreator from './components/eventCreationSlice/EventCreator';
+import EventDetails from './components/eventDetailsSlice/EventDetails';
+import CommandCreator from './components/commandCreationSlice/CommandCreator';
 
 function App(msg) {
   const [activeComponent, setActiveComponent] = useState(null);
@@ -19,9 +18,6 @@ function App(msg) {
         return <div>Select a component from the menu</div>;
     }
   };
-  const onCreateCommands = () => {
-    dispatch(ActionTypes.CreateCommandStickyNote)
-  };
 
   return (
     <div>
@@ -32,7 +28,7 @@ function App(msg) {
         <button onClick={() => setActiveComponent('EventCreator')}>
           Event Creator
         </button>
-        <button onClick={onCreateCommands}>Create Commands</button>
+        <CommandCreator />
 
       </nav>
       {renderComponent()}

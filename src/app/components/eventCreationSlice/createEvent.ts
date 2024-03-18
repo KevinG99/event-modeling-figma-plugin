@@ -1,6 +1,6 @@
-import { EventMessage } from '../types';
-import { moveStickyToSection } from './sliceAndSections';
-import { ORANGE_COLOR } from '../../plugin/controller';
+import { EventMessage } from '../../types';
+import { moveStickyToSection } from '../../methods/sliceAndSections';
+import { ORANGE_COLOR } from '../../../plugin/controller';
 
 export default handleCreateEventStickyNote;
 

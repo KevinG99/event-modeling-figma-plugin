@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { ActionTypes } from '../types';
-import { dispatch } from '../methods/uiMessageHandler';
+import { dispatch } from '../../methods/uiMessageHandler';
+import { ActionTypes } from '../../types';
 
 const BulkEventCreator = () => {
   const [eventText, setEventText] = useState('');

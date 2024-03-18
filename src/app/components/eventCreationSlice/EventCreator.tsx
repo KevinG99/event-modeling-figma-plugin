@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import PropertyForm from './PropertyForm';
 import JSONPreview from './JSONPreview';
-import { ActionTypes } from '../types';
-import { dispatch } from '../methods/uiMessageHandler';
+import { dispatch } from '../../methods/uiMessageHandler';
+import { ActionTypes } from '../../types';
 
 function EventCreator() {
   const [eventName, setEventName] = useState('');

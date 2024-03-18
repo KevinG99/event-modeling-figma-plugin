@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { dispatch } from '../methods/uiMessageHandler';
-import { ActionTypes } from '../types';
+import { dispatch } from '../../methods/uiMessageHandler';
+import { ActionTypes } from '../../types';
 
 
 function EventDetails({ characters, stickyNode }) {

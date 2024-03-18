@@ -3,9 +3,9 @@ import {
   StickyType,
 } from '../app/types';
 import { dispatch, handleEvent } from '../app/methods/codeMessageHandler';
-import handleCreateEventStickyNote from '../app/methods/createEvent';
-import handleCreateCommandStickyNote from '../app/methods/commandCreation';
-import handleCreateBulkEvents from '../app/methods/bulkEvents';
+import handleCreateEventStickyNote from '../app/components/EventCreationSlice/createEvent';
+import handleCreateCommandStickyNote from '../app/components/CommandCreationSlice/commandCreation';
+import handleCreateBulkEvents from '../app/components/BulkDataSlice/bulkEvents';
 
 figma.showUI(__html__);
 

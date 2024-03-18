@@ -1,12 +1,12 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './components/App';
+import App from './App';
+import VerifyEventModel from './components/modelVerifiactionSlice/VerifyEventModel';
 import { ActionTypes, StickyType } from './types';
-import EventDetails from './components/EventDetails';
-import CommandDetails from './components/CommandDetails';
-import ViewDetails from './components/ViewDetails';
-import SectionDetails from './components/SectionDetails';
-import VerifyEventModel from './components/VerifyEventModel';
+import EventDetails from './components/eventDetailsSlice/EventDetails';
+import CommandDetails from './components/commandDetailsSlice/CommandDetails';
+import ViewDetails from './components/viewDetailsSlice/ViewDetails';
+import SectionDetails from './components/sectionDetailsSlice/SectionDetails';
 
 document.addEventListener('DOMContentLoaded', function() {
   const container = document.getElementById('react-page');

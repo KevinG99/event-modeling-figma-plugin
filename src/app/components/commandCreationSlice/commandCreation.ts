@@ -1,6 +1,6 @@
-import { connectStickyNotes, moveStickyToSection } from './sliceAndSections';
-import { BLUE_COLOR } from '../../plugin/controller';
-import { getOrangeStickies } from './helpers';
+import { getOrangeStickies } from '../../methods/helpers';
+import { BLUE_COLOR } from '../../../plugin/controller';
+import { connectStickyNotes, moveStickyToSection } from '../../methods/sliceAndSections';
 
 export default handleCreateCommandStickyNote;
 
