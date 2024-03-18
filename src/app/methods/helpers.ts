@@ -1,4 +1,5 @@
-import { BLUE_COLOR, isColorMatch, ORANGE_COLOR } from '../../plugin/controller';
+import { isColorMatch } from '../../plugin/controller';
+import { BLUE_COLOR, ORANGE_COLOR } from '../../plugin/defaults';
 
 export async function getOrangeStickies() {
   return figma.root.findAll(

@@ -1,6 +1,6 @@
 import { EventMessage } from '../../types';
 import { moveStickyToSection } from '../../methods/sliceAndSections';
-import { ORANGE_COLOR } from '../../../plugin/controller';
+import { ORANGE_COLOR, STICKY_SEPARATOR } from '../../../plugin/defaults';
 
 export default handleCreateEventStickyNote;
 
@@ -17,9 +17,13 @@ export async function createEventStickyNote(msg: EventMessage) {
   sticky.fills = [{ type: 'SOLID', color: ORANGE_COLOR }];
   sticky.text.fontSize = 16;
 
-  let content = `${msg.eventName}\n---------\n`;
+  let content = `${msg.eventName}${STICKY_SEPARATOR}`;
   msg.properties.forEach((property) => {
-    content += `${property.name}: ${property.type}\n`;
+    if (property.defaultValue !== '') {
+      content += `${property.name}: ${property.type} = ${property.defaultValue}\n`;
+    } else {
+      content += `${property.name}: ${property.type}\n`;
+    }
   });
 
   sticky.text.characters = content;

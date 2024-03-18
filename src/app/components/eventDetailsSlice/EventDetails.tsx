@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { dispatch } from '../../methods/uiMessageHandler'; // Assuming this is for dispatching actions
-import { ActionTypes } from '../../types'; // Assuming this holds action types
+import { dispatch } from '../../methods/uiMessageHandler';
+import { ActionTypes } from '../../types';
+import { STICKY_SEPARATOR } from '../../../plugin/defaults';
 
 interface EventProperty {
   name: string;
   type: string;
+  defaultValue?: string;
 }
 
 function EventDetails({ characters }: { characters: string }): JSX.Element {
@@ -38,7 +40,7 @@ function EventDetails({ characters }: { characters: string }): JSX.Element {
   const handleUpdate = () => {
     dispatch(ActionTypes.UpdateEventStickyNote, {
       oldContent: characters,
-      newContent: `${eventName}\n---------\n${propertiesText}`,
+      newContent: `${eventName}${STICKY_SEPARATOR}${propertiesText}`,
     });
   };
 

@@ -1,11 +1,14 @@
 import { getOrangeStickies } from '../../methods/helpers';
-import { BLUE_COLOR } from '../../../plugin/controller';
 import { connectStickyNotes, moveStickyToSection } from '../../methods/sliceAndSections';
+import { BLUE_COLOR, STICKY_SEPARATOR } from '../../../plugin/defaults';
 
 export default handleCreateCommandStickyNote;
 
-function convertToCommandName(eventName: string): string {
-  return `${eventName}Command`;
+function convertToCommandInput(eventNodeChars: string): string {
+  const [eventName, properties] = eventNodeChars.split(STICKY_SEPARATOR);
+  const propertiesArray = properties.split('\n');
+  const filteredProperties = propertiesArray.filter((property) => !property.includes('='));
+  return `${eventName}Command${STICKY_SEPARATOR}${filteredProperties.join('\n')}`;
 }
 
 function handleCreateCommandStickyNote() {
@@ -14,12 +17,12 @@ function handleCreateCommandStickyNote() {
   });
 }
 
-export async function createCommandStickyNote(eventName: string) {
+export async function createCommandStickyNote(eventNodeChars: string) {
   const sticky = figma.createSticky();
   await figma.loadFontAsync(sticky.text.fontName as FontName);
   sticky.fills = [{ type: 'SOLID', color: BLUE_COLOR }];
   sticky.text.fontSize = 16;
-  sticky.text.characters = convertToCommandName(eventName);
+  sticky.text.characters = convertToCommandInput(eventNodeChars);
   return sticky;
 }
 
@@ -29,8 +32,8 @@ export async function createCommandSection(eventSticky: SceneNode) {
     return;
   }
 
-  const eventName = (eventSticky as StickyNode).text.characters;
-  const commandSticky = await createCommandStickyNote(eventName);
+  const eventNoteChars = (eventSticky as StickyNode).text.characters;
+  const commandSticky = await createCommandStickyNote(eventNoteChars);
   connectStickyNotes(commandSticky, eventSticky);
   moveStickyToSection(commandSticky, eventSticky.parent as SectionNode);
 }
