@@ -1,7 +1,7 @@
 {
   "name": "EventModeling",
   "version": "1.0.0",
-  "description": "This plugin template uses Typescript. If you are familiar with Javascript, Typescript will look very familiar. In fact, valid Javascript code is already valid Typescript code.",
+  "description": "This plugin is enhancing the Event Modeling experience by providing a features to support the consistent and correct information flow of an event model.",
   "license": "ISC",
   "scripts": {
     "build": "webpack --mode=production",
