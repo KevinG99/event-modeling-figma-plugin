@@ -18,3 +18,11 @@ export function isCommandStickyNote(sticky: StickyNode): boolean {
     isColorMatch((sticky.fills as SolidPaint[])[0].color, BLUE_COLOR)
   );
 }
+
+export function isEventSticky(sticky: StickyNode): boolean {
+  return (
+    Array.isArray(sticky.fills) &&
+    sticky.fills.length > 0 &&
+    isColorMatch((sticky.fills as SolidPaint[])[0].color, ORANGE_COLOR)
+  );
+}

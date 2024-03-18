@@ -1,13 +1,16 @@
-export default handleUpdateEventStickyNote
+import { isEventSticky } from '../../methods/helpers';
 
+async function handleUpdateEventStickyNote({ oldContent, newContent }) {
+  const eventName = oldContent.split('\n---------\n')[0];
+  const allStickyNodesWithSameName = figma.currentPage.findAll(
+    (node) => node.type === 'STICKY' && node.text.characters.startsWith(eventName) && isEventSticky(node)
+  );
 
-function handleUpdateEventStickyNote({ stickyNode, newContent }) {
-  console.log('handleUpdateEventStickyNote', stickyNode, newContent);
-  const stickyName = stickyNode.name;
-  const allStickyNodes = figma.currentPage.findAll((node) => node.type === 'STICKY' && node.name === stickyName);
-
-  for (const node of allStickyNodes) {
-    let stickyNode = node as StickyNode
-    stickyNode.text.characters = newContent;
+  for (const node of allStickyNodesWithSameName) {
+    const stickyNode = node as StickyNode;
+    await figma.loadFontAsync(stickyNode.text.fontName as FontName);
+    stickyNode.text.characters = newContent
   }
 }
+
+export default handleUpdateEventStickyNote;
