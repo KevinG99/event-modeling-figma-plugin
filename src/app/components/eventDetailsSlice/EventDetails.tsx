@@ -5,7 +5,6 @@ import { STICKY_SEPARATOR } from '../../../plugin/defaults';
 import PropertyList from './PropertyList';
 import PropertyForm from '../eventCreationSlice/PropertyForm';
 
-
 function EventDetails({ characters }: { characters: string }): JSX.Element {
   const [eventName, setEventName] = useState('');
   const [propertiesText, setPropertiesText] = useState('');
@@ -33,18 +32,26 @@ function EventDetails({ characters }: { characters: string }): JSX.Element {
     });
   };
 
+  const parseProperties = (text: string) => {
+    return text.split('\n').map((line) => {
+      const parts = line.split(': ');
+      const [name, typeWithDefaultValue] = parts;
+      const [type, defaultValue] = typeWithDefaultValue.split('=');
+      return { name, type, defaultValue: defaultValue || undefined };
+    });
+  };
+
   const addNewProperty = (property) => {
     const { name, type, defaultValue } = property;
     const newProperty = { name, type, defaultValue: defaultValue || undefined };
-    setProperties([...properties, newProperty]);
 
-    const newPropertiesText = [...properties, newProperty]
-      .map((prop) => {
-        const { name, type, defaultValue } = prop;
-        return `${name}: ${type}${defaultValue ? `=${defaultValue}` : ''}`;
-      })
+    const existingProperties = parseProperties(propertiesText);
+    const updatedProperties = [...existingProperties, newProperty];
+    const newPropertiesText = updatedProperties
+      .map(({ name, type, defaultValue }) => `${name}: ${type}${defaultValue ? `=${defaultValue}` : ''}`)
       .join('\n');
 
+    setProperties(updatedProperties);
     setPropertiesText(newPropertiesText);
   };
 
@@ -67,7 +74,12 @@ function EventDetails({ characters }: { characters: string }): JSX.Element {
       </div>
       {!isExpertMode && (
         <>
-          <PropertyList propertiesText={propertiesText} setPropertiesText={setPropertiesText} />
+          <PropertyList
+            propertiesText={propertiesText}
+            setPropertiesText={setPropertiesText}
+            properties={properties}
+            setProperties={setProperties}
+          />
           <PropertyForm addProperty={addNewProperty} />
         </>
       )}
