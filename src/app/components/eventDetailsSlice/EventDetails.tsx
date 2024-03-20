@@ -2,20 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { dispatch } from '../../methods/uiMessageHandler';
 import { ActionTypes } from '../../types';
 import { STICKY_SEPARATOR } from '../../../plugin/defaults';
+import PropertyList from './PropertyList';
 import PropertyForm from '../eventCreationSlice/PropertyForm';
 
-interface EventProperty {
-  name: string;
-  type: string;
-  defaultValue?: string;
-}
 
 function EventDetails({ characters }: { characters: string }): JSX.Element {
   const [eventName, setEventName] = useState('');
   const [propertiesText, setPropertiesText] = useState('');
-  const [isExpertMode, setIsExpertMode] = useState(false); // Use state for checkbox
-  const [newPropertyName, setNewPropertyName] = useState('');
-  const [newPropertyType, setNewPropertyType] = useState('');
+  const [isExpertMode, setIsExpertMode] = useState(false);
+  const [properties, setProperties] = useState([]);
 
   useEffect(() => {
     const lines = characters.split('\n');
@@ -31,13 +26,6 @@ function EventDetails({ characters }: { characters: string }): JSX.Element {
     setPropertiesText(event.target.value);
   };
 
-  const parseProperties = (text: string): EventProperty[] => {
-    return text.split('\n').map((line) => {
-      const parts = line.split(': ');
-      return { name: parts[0], type: parts[1] };
-    });
-  };
-
   const handleUpdate = () => {
     dispatch(ActionTypes.UpdateEventStickyNote, {
       oldContent: characters,
@@ -45,20 +33,19 @@ function EventDetails({ characters }: { characters: string }): JSX.Element {
     });
   };
 
-  const removeProperty = (index: number) => {
-    const newProperties = [...parseProperties(propertiesText)];
-    newProperties.splice(index, 1);
-    setPropertiesText(newProperties.map((prop) => `${prop.name}: ${prop.type}`).join('\n'));
-  };
+  const addNewProperty = (property) => {
+    const { name, type, defaultValue } = property;
+    const newProperty = { name, type, defaultValue: defaultValue || undefined };
+    setProperties([...properties, newProperty]);
 
+    const newPropertiesText = [...properties, newProperty]
+      .map((prop) => {
+        const { name, type, defaultValue } = prop;
+        return `${name}: ${type}${defaultValue ? `=${defaultValue}` : ''}`;
+      })
+      .join('\n');
 
-  const addNewProperty = () => {
-    if (!newPropertyName || !newPropertyType) return;
-    const newProperties = [...parseProperties(propertiesText)];
-    newProperties.push({ name: newPropertyName, type: newPropertyType });
-    setPropertiesText(newProperties.map((prop) => `${prop.name}: ${prop.type}`).join('\n'));
-    setNewPropertyName('');
-    setNewPropertyType('');
+    setPropertiesText(newPropertiesText);
   };
 
   return (
@@ -69,29 +56,26 @@ function EventDetails({ characters }: { characters: string }): JSX.Element {
       </div>
       <div>
         <label htmlFor="isExpertMode">
-          <input type="checkbox" id="isExpertMode" checked={isExpertMode}
-                 onChange={(event) => setIsExpertMode(event.target.checked)} />
+          <input
+            type="checkbox"
+            id="isExpertMode"
+            checked={isExpertMode}
+            onChange={(event) => setIsExpertMode(event.target.checked)}
+          />
           Expert Mode
         </label>
       </div>
+      {!isExpertMode && (
+        <>
+          <PropertyList propertiesText={propertiesText} setPropertiesText={setPropertiesText} />
+          <PropertyForm addProperty={addNewProperty} />
+        </>
+      )}
       {isExpertMode && (
         <div>
           <label htmlFor="properties">Properties:</label>
           <textarea id="properties" value={propertiesText} onChange={handlePropertiesChange} rows={5} />
         </div>
-      )}
-      {!isExpertMode && (
-        <>
-          <PropertyForm addProperty={addNewProperty} />
-          <ul>
-            {parseProperties(propertiesText).map((prop, index) => (
-              <li key={index}>
-                {prop.name}: {prop.type}
-                <button type="button" onClick={() => removeProperty(index)}>Remove</button>
-              </li>
-            ))}
-          </ul>
-        </>
       )}
       <button onClick={handleUpdate}>Update</button>
     </div>
