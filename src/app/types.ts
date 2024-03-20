@@ -1,7 +1,7 @@
 export interface EventMessage {
   type: ActionTypes;
   eventName: string;
-  properties: Array<{ name: string; type: string }>;
+  properties: Array<{ name: string; type: string; defaultValue: string }>;
 }
 
 export interface BulkEventMessage {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { dispatch } from '../../methods/uiMessageHandler';
 import { ActionTypes } from '../../types';
 import { STICKY_SEPARATOR } from '../../../plugin/defaults';
+import PropertyForm from '../eventCreationSlice/PropertyForm';
 
 interface EventProperty {
   name: string;
@@ -50,13 +51,6 @@ function EventDetails({ characters }: { characters: string }): JSX.Element {
     setPropertiesText(newProperties.map((prop) => `${prop.name}: ${prop.type}`).join('\n'));
   };
 
-  const handleNewPropertyNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewPropertyName(event.target.value);
-  };
-
-  const handleNewPropertyTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewPropertyType(event.target.value);
-  };
 
   const addNewProperty = () => {
     if (!newPropertyName || !newPropertyType) return;
@@ -87,10 +81,8 @@ function EventDetails({ characters }: { characters: string }): JSX.Element {
         </div>
       )}
       {!isExpertMode && (
-        <form onSubmit={(event) => {
-          event.preventDefault();
-          addNewProperty();
-        }}>
+        <>
+          <PropertyForm addProperty={addNewProperty} />
           <ul>
             {parseProperties(propertiesText).map((prop, index) => (
               <li key={index}>
@@ -99,14 +91,7 @@ function EventDetails({ characters }: { characters: string }): JSX.Element {
               </li>
             ))}
           </ul>
-          <div>
-            <input type="text" placeholder="New Property Name" value={newPropertyName}
-                   onChange={handleNewPropertyNameChange} />
-            <input type="text" placeholder="New Property Type" value={newPropertyType}
-                   onChange={handleNewPropertyTypeChange} />
-            <button type="submit">Add Property</button>
-          </div>
-        </form>
+        </>
       )}
       <button onClick={handleUpdate}>Update</button>
     </div>
