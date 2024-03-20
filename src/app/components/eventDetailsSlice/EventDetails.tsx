@@ -4,6 +4,7 @@ import { ActionTypes } from '../../types';
 import { STICKY_SEPARATOR } from '../../../plugin/defaults';
 import PropertyList from './PropertyList';
 import PropertyForm from '../eventCreationSlice/PropertyForm';
+import { parseProperties } from './utils';
 
 function EventDetails({ characters }: { characters: string }): JSX.Element {
   const [eventName, setEventName] = useState('');
@@ -15,29 +16,34 @@ function EventDetails({ characters }: { characters: string }): JSX.Element {
     const lines = characters.split('\n');
     setEventName(lines[0]);
     setPropertiesText(lines.slice(2).join('\n'));
+
+    // Parse initial propertiesText and set properties state
+    const initialProperties = parseProperties(lines.slice(2).join('\n'));
+    setProperties(initialProperties);
   }, [characters]);
+
+  useEffect(() => {
+    const parsedProperties = parseProperties(propertiesText);
+    setProperties(parsedProperties);
+  }, [propertiesText]);
 
   const handleEventNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEventName(event.target.value);
   };
 
   const handlePropertiesChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setPropertiesText(event.target.value);
+    const newPropertiesText = event.target.value;
+    setPropertiesText(newPropertiesText);
+
+    // Update properties state based on the new propertiesText
+    const parsedProperties = parseProperties(newPropertiesText);
+    setProperties(parsedProperties);
   };
 
   const handleUpdate = () => {
     dispatch(ActionTypes.UpdateEventStickyNote, {
       oldContent: characters,
       newContent: `${eventName}${STICKY_SEPARATOR}${propertiesText}`,
-    });
-  };
-
-  const parseProperties = (text: string) => {
-    return text.split('\n').map((line) => {
-      const parts = line.split(': ');
-      const [name, typeWithDefaultValue] = parts;
-      const [type, defaultValue] = typeWithDefaultValue.split('=');
-      return { name, type, defaultValue: defaultValue || undefined };
     });
   };
 
