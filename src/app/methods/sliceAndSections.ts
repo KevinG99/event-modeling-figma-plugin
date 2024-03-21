@@ -1,5 +1,5 @@
 import { isCommandStickyNote } from './helpers';
-import { STICKY_SEPARATOR } from '../../plugin/defaults';
+import { deserializeStickyNoteData } from './serialization-deserialization_StickyNote';
 
 function createSliceName(name: string): string {
   return `slice: ${name}`;
@@ -18,9 +18,9 @@ export function moveStickyToSection(sceneNode: SceneNode, section?: SectionNode)
   if (!section) {
     section = figma.createSection();
     section.resizeWithoutConstraints(sceneNode.width + 100, sceneNode.height + 100); // Starting size, adjust as needed
-    console.log(sceneNode.name);
-    const stickyNoteText = parseStickyCharacters(sceneNode.name);
-    console.log(stickyNoteText);
+    console.log("original text: " + sceneNode.name);
+    const stickyNoteText = deserializeStickyNoteData(sceneNode.name); //TODO: Currently only parsing the name correctly
+    console.log("parsed text: " + JSON.stringify(stickyNoteText));
     section.name = createSliceName(stickyNoteText.name)
     section.x = figma.viewport.center.x
     section.y = figma.viewport.center.y
@@ -72,18 +72,3 @@ export function moveStickyToSection(sceneNode: SceneNode, section?: SectionNode)
   return section;
 }
 
-interface StickyNoteText {
-  name: string;
-  properties: string[];
-}
-
-export function parseStickyCharacters(characters: string): StickyNoteText {
-  const sections = characters.split(STICKY_SEPARATOR.replace(/\n/g, ' '));
-  console.log(sections);
-  if (sections.length === 0) {
-    throw new Error('Sticky Note does not contain correct format');
-  }
-  const [item] = sections; // Destructure to get the first section
-  let [name, ...properties] = item.split('\n');
-  return { name, properties } as StickyNoteText;
-}

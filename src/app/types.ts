@@ -1,19 +1,18 @@
-export interface EventMessage {
-  type: ActionTypes;
-  eventName: string;
-  properties: Array<{ name: string; type: string; defaultValue: string }>;
+export interface StickyNoteData {
+  name: string;
+  properties: Property[];
 }
 
+type Property = {
+  name: string;
+  type: string;
+  defaultValue?: string;
+};
+
 export interface BulkEventMessage {
-  type: ActionTypes;
   eventNames: string[];
 }
 
-export interface StickyDetailsMessage {
-  type: ActionTypes;
-  stickyType: StickyType;
-  id: string;
-}
 
 export enum ActionTypes {
   CreateEventStickyNote = 'create-event',
@@ -23,6 +22,7 @@ export enum ActionTypes {
   NothingSelected = 'nothing-selected',
   SectionSelected = 'section-selected',
   UpdateEventStickyNote = 'update-event',
+  CreateViewStickyNote = 'create-view',
 }
 
 export enum StickyType {
@@ -31,6 +31,3 @@ export enum StickyType {
   View = 'view',
 }
 
-export interface UIAction {
-  type: ActionTypes;
-}

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import PropertyForm from './PropertyForm';
-import JSONPreview from './JSONPreview';
 import { dispatch } from '../../methods/uiMessageHandler';
 import { ActionTypes } from '../../types';
+import StickyNotePreview from './StickyNotePreview';
 
 function EventCreator() {
   const [eventName, setEventName] = useState('');
@@ -18,7 +18,8 @@ function EventCreator() {
   };
 
   const onCreate = () => {
-    dispatch(ActionTypes.CreateEventStickyNote, { eventName, properties });
+    dispatch(ActionTypes.CreateEventStickyNote, { name: eventName, properties });
+    clearEverything();
   };
 
 
@@ -33,7 +34,7 @@ function EventCreator() {
         onChange={(e) => setEventName(e.target.value)}
       />
       <PropertyForm addProperty={addProperty} />
-      <JSONPreview eventName={eventName} properties={properties} />
+      <StickyNotePreview name={eventName} properties={properties} />
       <button onClick={onCreate}>Create</button>
       <button onClick={clearEverything}>Cancel</button>
     </div>

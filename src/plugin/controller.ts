@@ -5,6 +5,7 @@ import handleCreateEventStickyNote from '../app/components/eventCreationSlice/cr
 import handleCreateCommandStickyNote from '../app/components/commandCreationSlice/commandCreation';
 import handleCreateBulkEvents from '../app/components/bulkDataSlice/bulkEvents';
 import { BLUE_COLOR, COLOR_TOLERANCE, GREEN_COLOR, ORANGE_COLOR } from './defaults';
+import handleCreateViewStickyNote from '../app/components/createViewSlice/viewCreation';
 
 figma.showUI(__html__);
 
@@ -49,6 +50,7 @@ handleEvent(ActionTypes.CreateEventStickyNote, handleCreateEventStickyNote);
 handleEvent(ActionTypes.CreateCommandStickyNote, handleCreateCommandStickyNote);
 handleEvent(ActionTypes.CreateBulkEvents, handleCreateBulkEvents);
 handleEvent(ActionTypes.UpdateEventStickyNote, handleUpdateEventStickyNote);
+handleEvent(ActionTypes.CreateViewStickyNote, handleCreateViewStickyNote);
 
 
 
