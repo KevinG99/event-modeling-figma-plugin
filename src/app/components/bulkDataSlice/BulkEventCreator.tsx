@@ -24,6 +24,7 @@ const BulkEventCreator = () => {
 
   return (
     <div>
+      <h2>Bulk Event Creator</h2>
       <textarea
         value={eventText}
         onChange={handleEventTextChange}
@@ -31,7 +32,7 @@ const BulkEventCreator = () => {
         rows={10}
       />
       <button onClick={publishEvents} disabled={!eventText.trim()}>
-        Publish Events
+        Create Events
       </button>
     </div>
   );

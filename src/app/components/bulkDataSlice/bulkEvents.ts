@@ -1,4 +1,4 @@
-import { ActionTypes, BulkEventMessage } from '../../types';
+import { BulkEventMessage } from '../../types';
 import { moveStickyToSection } from '../../methods/sliceAndSections';
 import { createEventStickyNote } from '../eventCreationSlice/createEvent';
 
@@ -7,7 +7,7 @@ function handleCreateBulkEvents(msg: BulkEventMessage) {
   const existingNodes = [];
 
   const promises = msg.eventNames.map(eventName =>
-    createEventStickyNote({ type: ActionTypes.CreateEventStickyNote, eventName, properties: [] })
+    createEventStickyNote({ name: eventName, properties: [] })
       .then(sticky => {
         const nextPos = getNextAvailablePosition(existingNodes);
         const sectionNode = moveStickyToSection(sticky);
