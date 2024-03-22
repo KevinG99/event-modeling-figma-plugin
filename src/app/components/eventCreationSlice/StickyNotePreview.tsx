@@ -3,17 +3,15 @@ import { serializeStickyNoteData } from '../../methods/serialization-deserializa
 import { StickyNoteData } from '../../types';
 
 
-
-function StickyNotePreview({name, properties} : StickyNoteData) {
-  // Assuming serializeStickyNoteData is a function that takes eventName and properties and returns a string
-  const serializedData = serializeStickyNoteData({ name, properties });
+function StickyNotePreview({ name, properties }: StickyNoteData) {
+  const serializedData = name ? serializeStickyNoteData({ name, properties }) : '';
 
   return (
     <div>
       <h3>Preview</h3>
       <textarea
-        value={serializedData}
         readOnly
+        value={serializedData}
         rows={5}
         style={{ width: '100%' }}
       />

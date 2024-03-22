@@ -44,14 +44,23 @@ export function deserializeStickyNoteData(content: string): StickyNoteData {
 
 
 
-export function serializeStickyNoteData(msg : StickyNoteData) {
-  let content = `${msg.name}${STICKY_SEPARATOR}`;
+export function serializeStickyNoteData(msg: StickyNoteData) {
+  let content = msg.name; // Start with just the name, not appending the separator yet.
+  let propertiesContent = ''; // Initialize an empty string for properties content.
+
+  // Accumulate properties content.
   msg.properties.forEach((property) => {
     if (property.defaultValue !== '') {
-      content += `${property.name}: ${property.type} = ${property.defaultValue}\n`;
+      propertiesContent += `${property.name}: ${property.type} = ${property.defaultValue}\n`;
     } else {
-      content += `${property.name}: ${property.type}\n`;
+      propertiesContent += `${property.name}: ${property.type}\n`;
     }
   });
+
+  // Conditionally append the separator and properties content if there is any.
+  if (propertiesContent) {
+    content += `${STICKY_SEPARATOR}${propertiesContent}`;
+  }
+
   return content;
 }
