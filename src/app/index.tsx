@@ -31,7 +31,7 @@ handleEvent(ActionTypes.StickyNoteSelected, (data : StickyDetails) => {
       reactPageRoot.render(<CommandDetails />);
       break;
     case StickyType.View:
-      reactPageRoot.render(<ViewDetails />);
+      reactPageRoot.render(<ViewDetails {...data}/>);
       break;
   }
 });
