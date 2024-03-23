@@ -4,18 +4,17 @@ import { ActionTypes } from '../../types';
 import PropertyForm from '../eventCreationSlice/PropertyForm';
 import StickyNotePreview from '../eventCreationSlice/StickyNotePreview';
 
-function ViewCreator(){
+function ViewCreator() {
   const [viewName, setViewName] = useState('');
   const [properties, setProperties] = useState([]);
 
   const addProperty = (property) => {
     setProperties([...properties, property]);
-  }
+  };
   const onCreateView = () => {
     dispatch(ActionTypes.CreateViewStickyNote, { name: viewName, properties });
     clearEverything();
-  }
-
+  };
 
 
   const clearEverything = () => {
@@ -35,7 +34,9 @@ function ViewCreator(){
         onChange={(e) => setViewName(e.target.value)}
       />
       <PropertyForm addProperty={addProperty} defaultValues={false} />
-      <StickyNotePreview name={viewName} properties={properties} />
+      <StickyNotePreview name={viewName} properties={properties}
+                         onSerializedDataChange={undefined}
+      />
       <button onClick={onCreateView}>Create</button>
       <button onClick={clearEverything}>Cancel</button>
 

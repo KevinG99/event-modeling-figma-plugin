@@ -34,7 +34,7 @@ function EventCreator() {
         onChange={(e) => setEventName(e.target.value)}
       />
       <PropertyForm addProperty={addProperty} />
-      <StickyNotePreview name={eventName} properties={properties} />
+      <StickyNotePreview name={eventName} properties={properties} onSerializedDataChange={undefined} />
       <button onClick={onCreate}>Create</button>
       <button onClick={clearEverything}>Cancel</button>
     </div>

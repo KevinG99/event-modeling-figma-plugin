@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import VerifyEventModel from './components/modelVerifiactionSlice/VerifyEventModel';
-import { ActionTypes, StickyType } from './types';
+import { ActionTypes, StickyDetails, StickyType } from './types';
 import EventDetails from './components/eventDetailsSlice/EventDetails';
 import CommandDetails from './components/commandDetailsSlice/CommandDetails';
 import ViewDetails from './components/viewDetailsSlice/ViewDetails';
@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
   );
 });
 
-handleEvent(ActionTypes.StickyNoteSelected, (data) => {
-  switch (data.stickyType) {
+handleEvent(ActionTypes.StickyNoteSelected, (data : StickyDetails) => {
+  switch (data.type) {
     case StickyType.Event:
       reactPageRoot.render(<EventDetails {...data} />);
       break;
@@ -32,8 +32,6 @@ handleEvent(ActionTypes.StickyNoteSelected, (data) => {
       break;
     case StickyType.View:
       reactPageRoot.render(<ViewDetails />);
-      break;
-    default:
       break;
   }
 });

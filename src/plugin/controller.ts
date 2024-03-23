@@ -22,11 +22,11 @@ export function isColorMatch(color1: RGB, color2: RGB): boolean {
 function handleStickyNoteSelection(stickyNode: StickyNode) {
   let characters = stickyNode.text.characters;
   if (isColorMatch(stickyNode.fills[0].color, ORANGE_COLOR)) {
-    dispatch(ActionTypes.StickyNoteSelected, { stickyType: StickyType.Event, characters, stickyNode })
+    dispatch(ActionTypes.StickyNoteSelected, { type: StickyType.Event, characters, stickyNode })
   } else if (isColorMatch(stickyNode.fills[0].color, BLUE_COLOR)) {
-    dispatch(ActionTypes.StickyNoteSelected, { stickyType: StickyType.Command, characters, stickyNode });
+    dispatch(ActionTypes.StickyNoteSelected, { type: StickyType.Command, characters, stickyNode });
   } else if (isColorMatch(stickyNode.fills[0].color, GREEN_COLOR)) {
-    dispatch(ActionTypes.StickyNoteSelected, { stickyType: StickyType.View, characters, stickyNode });
+    dispatch(ActionTypes.StickyNoteSelected, { type: StickyType.View, characters, stickyNode });
   }
 }
 

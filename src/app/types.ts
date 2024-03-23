@@ -3,7 +3,7 @@ export interface StickyNoteData {
   properties: Property[];
 }
 
-type Property = {
+export type Property = {
   name: string;
   type: string;
   defaultValue?: string;
@@ -11,6 +11,12 @@ type Property = {
 
 export interface BulkEventMessage {
   eventNames: string[];
+}
+
+export interface StickyDetails {
+  type: StickyType,
+  characters: string,
+  stickyNote : StickyNode
 }
 
 
