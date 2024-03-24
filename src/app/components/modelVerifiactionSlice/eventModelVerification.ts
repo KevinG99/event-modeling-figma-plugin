@@ -2,7 +2,6 @@ import { determineStickyType } from '../../methods/helpers';
 import { StickyType } from '../../types';
 import { deserializeStickyNoteData } from '../../methods/serialization-deserialization_StickyNote';
 
-
 //event must have properties from connected command or if it has default values it's  also okay -> success
 //view must have properties from the connected events if it's not existing, then the view or event must have been wrong and the data can't be provided so it's not sucessful.
 export function verifyEventModel(allStickies: StickyNode[], allConnectors: ConnectorNode[]) {
@@ -12,10 +11,6 @@ export function verifyEventModel(allStickies: StickyNode[], allConnectors: Conne
   // Map all sticky notes by ID for quick access
   const stickiesById = allStickies.reduce((acc, sticky) => {
     acc[sticky.id] = sticky;
-    //deserialize the sticky note's properties
-    const deserializedData = deserializeStickyNoteData(sticky.name);
-    sticky.data = deserializedData;
-    sticky.type = determineStickyType(sticky);
     return acc;
   }, {});
 
@@ -34,28 +29,55 @@ export function verifyEventModel(allStickies: StickyNode[], allConnectors: Conne
   }, {});
 
   // Function to check if a sticky note's properties satisfy the verification conditions
-  const checkStickyProperties = (sticky, connectedStickies) => {
-    console.log('Checking sticky properties', JSON.stringify(sticky), JSON.stringify(connectedStickies);
-    // Implement the logic based on your application's specific rules and structure
-    // This is a placeholder for the verification logic
+  const checkStickyProperties = (sticky: StickyNode, connectedStickies: StickyNode[]) => {
+    const stickyType = determineStickyType(sticky);
+    const deserializedData = deserializeStickyNoteData(sticky.name);
+
+    if (stickyType === StickyType.Event) {
+      // Check if the event sticky has properties from connected commands or has default values
+      const hasPropertiesFromConnectedCommands = connectedStickies.some(
+        (connectedSticky) =>
+          determineStickyType(connectedSticky) === StickyType.Command &&
+          // Check if the event sticky has properties from the connected command
+          // Implement your own logic here, using deserializedData
+          true
+      );
+
+      const hasDefaultValues = // Check if the event sticky has default values
+        // Implement your own logic here, using deserializedData
+        true;
+
+      return hasPropertiesFromConnectedCommands || hasDefaultValues;
+    } else if (stickyType === StickyType.View) {
+      // Check if the view sticky has properties from connected events
+      return connectedStickies.some(
+        (connectedSticky) =>
+          determineStickyType(connectedSticky) === StickyType.Event &&
+          // Check if the view sticky has properties from the connected event
+          // Implement your own logic here, using deserializedData
+          true
+      );
+    }
+
+    // If the sticky type is neither Event nor View, return true by default
     return true;
   };
 
   // Verify each sticky note based on its connections and types
-  Object.entries(connections).forEach(([stickyId, connectedStickies]) => {
+  Object.entries(connections).forEach(([stickyId, connectedStickies]: [string, StickyNode[]]) => {
     const sticky = stickiesById[stickyId];
     const stickyType = determineStickyType(sticky);
 
     switch (stickyType) {
       case StickyType.Event:
         // Verify event stickies according to the rules
-        if (!checkStickyProperties(sticky, connectedStickies.filter(s => determineStickyType(s) === 'command'))) {
+        if (!checkStickyProperties(sticky, connectedStickies.filter(s => determineStickyType(s) === StickyType.Command))) {
           verificationPassed = false;
         }
         break;
       case StickyType.View:
         // Verify view stickies according to the rules
-        if (!checkStickyProperties(sticky, connectedStickies.filter(s => determineStickyType(s) === 'event'))) {
+        if (!checkStickyProperties(sticky, connectedStickies.filter(s => determineStickyType(s) === StickyType.Event))) {
           verificationPassed = false;
         }
         break;
