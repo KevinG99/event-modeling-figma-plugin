@@ -1,5 +1,5 @@
-import { isColorMatch } from '../../plugin/controller';
-import { BLUE_COLOR, ORANGE_COLOR } from '../../plugin/defaults';
+import { BLUE_COLOR, COLOR_TOLERANCE, GREEN_COLOR, ORANGE_COLOR } from '../../plugin/defaults';
+import { StickyType } from '../types';
 
 export async function getOrangeStickies() {
   return figma.root.findAll(
@@ -26,4 +26,22 @@ export function isEventSticky(sticky: StickyNode): boolean {
     sticky.fills.length > 0 &&
     isColorMatch((sticky.fills as SolidPaint[])[0].color, ORANGE_COLOR)
   );
+}
+
+function isColorMatch(color1: RGB, color2: RGB): boolean {
+  return (
+    Math.abs(color1.r - color2.r) <= COLOR_TOLERANCE &&
+    Math.abs(color1.g - color2.g) <= COLOR_TOLERANCE &&
+    Math.abs(color1.b - color2.b) <= COLOR_TOLERANCE
+  );
+}
+
+export function determineStickyType(stickyNode: StickyNode): StickyType {
+  if (isColorMatch(stickyNode.fills[0].color, ORANGE_COLOR)) {
+    return StickyType.Event
+  } else if (isColorMatch(stickyNode.fills[0].color, BLUE_COLOR)) {
+    return StickyType.Command
+  } else if (isColorMatch(stickyNode.fills[0].color, GREEN_COLOR)) {
+    return StickyType.View
+  }
 }

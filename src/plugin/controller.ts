@@ -1,34 +1,17 @@
-import { ActionTypes, ConnectedStickiesInfo, StickyType } from '../app/types';
+import { ActionTypes, ConnectedStickiesInfo } from '../app/types';
 import { dispatch, handleEvent } from '../app/methods/codeMessageHandler';
 import handleUpdateEventStickyNote from '../app/components/eventDetailsSlice/updateEvents';
 import handleCreateEventStickyNote from '../app/components/eventCreationSlice/createEvent';
 import handleCreateCommandStickyNote from '../app/components/commandCreationSlice/commandCreation';
 import handleCreateBulkEvents from '../app/components/bulkDataSlice/bulkEvents';
-import { BLUE_COLOR, COLOR_TOLERANCE, GREEN_COLOR, ORANGE_COLOR } from './defaults';
 import handleCreateViewStickyNote from '../app/components/createViewSlice/viewCreation';
 import { deserializeStickyNoteData } from '../app/methods/serialization-deserialization_StickyNote';
+import { determineStickyType } from '../app/methods/helpers';
 
 figma.showUI(__html__);
 
 figma.ui.resize(300, 600);
 
-export function isColorMatch(color1: RGB, color2: RGB): boolean {
-  return (
-    Math.abs(color1.r - color2.r) <= COLOR_TOLERANCE &&
-    Math.abs(color1.g - color2.g) <= COLOR_TOLERANCE &&
-    Math.abs(color1.b - color2.b) <= COLOR_TOLERANCE
-  );
-}
-
-function determineStickyType(stickyNode: StickyNode): StickyType {
-  if (isColorMatch(stickyNode.fills[0].color, ORANGE_COLOR)) {
-    return StickyType.Event
-  } else if (isColorMatch(stickyNode.fills[0].color, BLUE_COLOR)) {
-    return StickyType.Command
-  } else if (isColorMatch(stickyNode.fills[0].color, GREEN_COLOR)) {
-    return StickyType.View
-  }
-}
 
 figma.on('selectionchange', handleSelectionChange);
 function handleSelectionChange() {
