@@ -72,7 +72,7 @@ function categorizeAndListConnectedStickies(selectedStickyNode: StickyNode, allS
     );
     if (connectedSticky) {
       // Categorize the connected sticky note based on its color
-      const category = categorizeStickyNoteByColor(connectedSticky);
+      const category = determineStickyType(connectedSticky);
       if (category) {
         // Deserialize the sticky note's properties
         const deserializedData = deserializeStickyNoteData(connectedSticky.name);
@@ -83,19 +83,6 @@ function categorizeAndListConnectedStickies(selectedStickyNode: StickyNode, allS
 
   });
   return connectedStickiesInfo;
-
-}
-function categorizeStickyNoteByColor(stickyNote) {
-  if (isColorMatch(stickyNote.fills[0].color, ORANGE_COLOR)) {
-    return 'event';
-  } else if (isColorMatch(stickyNote.fills[0].color, BLUE_COLOR)) {
-    return 'command';
-  } else if (isColorMatch(stickyNote.fills[0].color, GREEN_COLOR)) {
-    return 'view';
-  }
-  return null; // If the color doesn't match any category
-
-
 }
 
 
