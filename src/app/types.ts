@@ -35,7 +35,7 @@ export enum ActionTypes {
   SectionSelected = 'section-selected',
   UpdateEventStickyNote = 'update-event',
   CreateViewStickyNote = 'create-view',
-  ShowConnectedStickiesInfo = 'connected-stickies-info'
+  VerifyEventModel = 'verify-event-model',
 }
 
 export enum StickyType {

@@ -27,7 +27,7 @@ function handleSelectionChange() {
   } else if (selectedNodes.length === 1 && selectedNodes[0].type === 'SECTION') {
     dispatch(ActionTypes.SectionSelected, selectedNodes[0]);
   } else {
-    dispatch(ActionTypes.NothingSelected);
+    dispatch(ActionTypes.NothingSelected, { allStickies: allStickies, allConnectors: allConnectors });
   }
   dispatch(ActionTypes.VerifyEventModel, { allStickies: allStickies, allConnectors: allConnectors });
 }

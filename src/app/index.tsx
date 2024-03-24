@@ -11,8 +11,8 @@ import VerifyEventModel from './components/modelVerifiactionSlice/VerifyEventMod
 
 
 let reactPageRoot;
-let allStickies = [];
-let allConnectors = [];
+let allStickies
+let allConnectors
 
 
 document.addEventListener('DOMContentLoaded', function () {
