@@ -22,16 +22,16 @@ document.addEventListener('DOMContentLoaded', function () {
   );
 });
 
-handleEvent(ActionTypes.StickyNoteSelected, (data : StickyDetails) => {
-  switch (data.type) {
+handleEvent(ActionTypes.StickyNoteSelected, (details : StickyDetails) => {
+  switch (details.type) {
     case StickyType.Event:
-      reactPageRoot.render(<EventDetails {...data} />);
+      reactPageRoot.render(<EventDetails {...details} />);
       break;
     case StickyType.Command:
       reactPageRoot.render(<CommandDetails />);
       break;
     case StickyType.View:
-      reactPageRoot.render(<ViewDetails {...data}/>);
+      reactPageRoot.render(<ViewDetails {...details}/>);
       break;
   }
 });

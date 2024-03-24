@@ -3,8 +3,9 @@ import { deserializeStickyNoteData } from '../../methods/serialization-deseriali
 import { StickyDetails, ActionTypes, StickyNoteData } from '../../types';
 import StickyNotePreview from '../eventCreationSlice/StickyNotePreview';
 import { dispatch } from '../../methods/uiMessageHandler';
-function EventDetails({ characters }: StickyDetails) {
-  const initialStickyNoteData: StickyNoteData = {'name': '', 'properties': []};
+import StickyNodeOverview from './StickyConnections';
+function EventDetails({ connectedStickies, data, id }: StickyDetails) {
+  const initialStickyNoteData: StickyNoteData = {name: '', properties: []};
   const [stickyNoteData, setStickyNoteData] = useState(initialStickyNoteData);
 
   const handleStickyNoteChange = (serializedData: string) => {
@@ -12,12 +13,11 @@ function EventDetails({ characters }: StickyDetails) {
     setStickyNoteData(newData);
   };
   useEffect(() => {
-    const data = deserializeStickyNoteData(characters);
     setStickyNoteData(data);
   }, []);
 
   const updateStickyNote = () => {
-    dispatch(ActionTypes.UpdateEventStickyNote, stickyNoteData);
+    dispatch(ActionTypes.UpdateEventStickyNote, { stickyNoteData, id });
   };
 
   return (
@@ -29,6 +29,7 @@ function EventDetails({ characters }: StickyDetails) {
         onSerializedDataChange={handleStickyNoteChange}
       />
       <button onClick={updateStickyNote}>Edit</button>
+      <StickyNodeOverview event={connectedStickies.event} command={connectedStickies.command} view={connectedStickies.view} />
     </div>
   );
 }

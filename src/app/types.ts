@@ -15,10 +15,16 @@ export interface BulkEventMessage {
 
 export interface StickyDetails {
   type: StickyType,
-  characters: string,
-  stickyNote : StickyNode
+  id: string,
+  data: StickyNoteData
+  connectedStickies: ConnectedStickiesInfo
 }
 
+export interface ConnectedStickiesInfo{
+  event: StickyNoteData[]
+  command: StickyNoteData[]
+  view: StickyNoteData[]
+}
 
 export enum ActionTypes {
   CreateEventStickyNote = 'create-event',
@@ -29,6 +35,7 @@ export enum ActionTypes {
   SectionSelected = 'section-selected',
   UpdateEventStickyNote = 'update-event',
   CreateViewStickyNote = 'create-view',
+  ShowConnectedStickiesInfo = 'connected-stickies-info'
 }
 
 export enum StickyType {
