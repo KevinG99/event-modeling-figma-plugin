@@ -1,22 +1,25 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import VerifyEventModel from './components/modelVerifiactionSlice/VerifyEventModel';
 import { ActionTypes, StickyDetails, StickyType } from './types';
 import EventDetails from './components/eventDetailsSlice/EventDetails';
 import CommandDetails from './components/commandDetailsSlice/CommandDetails';
 import ViewDetails from './components/viewDetailsSlice/ViewDetails';
 import SectionDetails from './components/sectionDetailsSlice/SectionDetails';
 import { handleEvent } from './methods/uiMessageHandler';
+import VerifyEventModel from './components/modelVerifiactionSlice/VerifyEventModel';
 
 
 let reactPageRoot;
+let allStickies = [];
+let allConnectors = [];
+
 
 document.addEventListener('DOMContentLoaded', function () {
   reactPageRoot = createRoot(document.getElementById('react-page'));
   reactPageRoot.render(
     <>
-      <VerifyEventModel />
+      <VerifyEventModel allConnectors={allConnectors} allStickies={allStickies}/>
       <App />
     </>,
   );
@@ -36,10 +39,15 @@ handleEvent(ActionTypes.StickyNoteSelected, (details : StickyDetails) => {
   }
 });
 
-handleEvent(ActionTypes.NothingSelected, (data) => {
+handleEvent(ActionTypes.VerifyEventModel, (data) => {
+  allConnectors = data.allConnectors;
+  allStickies = data.allStickies;
+})
+
+handleEvent(ActionTypes.NothingSelected, () => {
   reactPageRoot.render(
     <>
-      <VerifyEventModel {...data} />
+      <VerifyEventModel allConnectors={allConnectors} allStickies={allStickies}/>
       <App />
     </>,
   );
