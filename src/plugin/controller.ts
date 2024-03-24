@@ -15,20 +15,21 @@ figma.ui.resize(300, 600);
 
 figma.on('selectionchange', handleSelectionChange);
 function handleSelectionChange() {
-  const nodes = figma.currentPage.selection;
+  const selectedNodes = figma.currentPage.selection;
   const allStickies = figma.currentPage.findAll(node => node.type === 'STICKY') as StickyNode[];
   const allConnectors = figma.currentPage.findAll(node => node.type === 'CONNECTOR') as ConnectorNode[];
-  if (nodes.length === 1 && nodes[0].type === 'STICKY') {
-    const stickyNode = nodes[0];
+  if (selectedNodes.length === 1 && selectedNodes[0].type === 'STICKY') {
+    const stickyNode = selectedNodes[0];
     const stickyType = determineStickyType(stickyNode);
     const stickyNoteData = deserializeStickyNoteData(stickyNode.text.characters)
     const connectedStickiesInfo = categorizeAndListConnectedStickies(stickyNode, allStickies, allConnectors);
     dispatch(ActionTypes.StickyNoteSelected, { type: stickyType, id: stickyNode.id, data: stickyNoteData, connectedStickies: connectedStickiesInfo})
-  } else if (nodes.length === 1 && nodes[0].type === 'SECTION') {
-    dispatch(ActionTypes.SectionSelected, nodes[0]);
+  } else if (selectedNodes.length === 1 && selectedNodes[0].type === 'SECTION') {
+    dispatch(ActionTypes.SectionSelected, selectedNodes[0]);
   } else {
-    dispatch(ActionTypes.NothingSelected, { allElements: allStickies });
+    dispatch(ActionTypes.NothingSelected);
   }
+  dispatch(ActionTypes.VerifyEventModel, { allStickies: allStickies, allConnectors: allConnectors });
 }
 function categorizeAndListConnectedStickies(selectedStickyNode: StickyNode, allStickies: StickyNode[], allConnectors: any[]) : ConnectedStickiesInfo {
 
