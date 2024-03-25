@@ -8,6 +8,16 @@ It is based on the [Event Modeling](https://eventmodeling.org/) methodology.
 # What is Event Modeling?
 Event Modeling is a method of describing systems using an example of how information has changed within them over time. Specifically this omits transient details and looks at what is durably stored and what the user sees at any particular point in time. These are the events on the timeline that form the description of the system.
 
+# Roadmap
+- [x] Create an Event
+- [x] Create bulk Events
+- [x] Create Commands for all Events which does not have a Command
+- [x] Create a View
+- [x] Edit all Events with the same name
+- [x] Edit all Commands with the same name
+- [x] Edit all Views with the same name
+- [x] Display connected stickies in the Detail View
+- [ ] Verify Event Model
 
 ## Contributing
 
