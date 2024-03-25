@@ -21,6 +21,6 @@ function StickyNotePreview({ name, properties, onSerializedDataChange }) {
       />
     </div>
   );
-};
+}
 
 export default StickyNotePreview;

@@ -1,13 +1,11 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import { ActionTypes, StickyDetails, StickyType } from './types';
-import EventDetails from './components/eventDetailsSlice/EventDetails';
-import CommandDetails from './components/commandDetailsSlice/CommandDetails';
-import ViewDetails from './components/viewDetailsSlice/ViewDetails';
+import { ActionTypes, StickyDetails} from './types';
 import SectionDetails from './components/sectionDetailsSlice/SectionDetails';
 import { handleEvent } from './methods/uiMessageHandler';
 import VerifyEventModel from './components/modelVerifiactionSlice/VerifyEventModel';
+import StickyDetailsComponent from './components/stickyDetailsSlice/StickyDetailsComponent';
 
 
 let reactPageRoot;
@@ -26,17 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 handleEvent(ActionTypes.StickyNoteSelected, (details : StickyDetails) => {
-  switch (details.type) {
-    case StickyType.Event:
-      reactPageRoot.render(<EventDetails {...details} />);
-      break;
-    case StickyType.Command:
-      reactPageRoot.render(<CommandDetails />);
-      break;
-    case StickyType.View:
-      reactPageRoot.render(<ViewDetails {...details}/>);
-      break;
-  }
+  reactPageRoot.render(<StickyDetailsComponent type={details.type} {...details} />);
 });
 
 

@@ -33,10 +33,9 @@ export enum ActionTypes {
   StickyNoteSelected = 'sticky-note-selected',
   NothingSelected = 'nothing-selected',
   SectionSelected = 'section-selected',
-  UpdateEventStickyNote = 'update-event',
-  UpdateViewStickyNote = 'update-view',
   CreateViewStickyNote = 'create-view',
   VerifyEventModel = 'verify-event-model',
+  UpdateStickyNote = 'update-sticky-note',
 }
 
 export enum StickyType {

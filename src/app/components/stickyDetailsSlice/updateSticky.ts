@@ -1,11 +1,11 @@
-import { determineStickyType } from '../../methods/stickyHelper';
 import { serializeStickyNoteData } from '../../methods/serialization-deserialization_StickyNote';
 import { StickyNoteData, StickyType } from '../../types';
+import { determineStickyType } from '../../methods/stickyHelper';
 
-async function handleUpdateViewStickyNote({stickyNoteData}: {stickyNoteData: StickyNoteData}) {
-  console.log('Updating view sticky note');
+async function handleUpdateStickyNote({ stickyNoteData, type }: { stickyNoteData: StickyNoteData, type: StickyType }) {
+  console.log(`Updating ${type} sticky note`);
   const allStickyNodesWithSameName = figma.currentPage.findAll(
-    (node) => node.type === 'STICKY' && node.text.characters.startsWith(stickyNoteData.name) && determineStickyType(node) === StickyType.View
+    (node) => node.type === 'STICKY' && node.text.characters.startsWith(stickyNoteData.name) && determineStickyType(node) === type
   );
 
   for (const node of allStickyNodesWithSameName) {
@@ -15,4 +15,4 @@ async function handleUpdateViewStickyNote({stickyNoteData}: {stickyNoteData: Sti
   }
 }
 
-export default handleUpdateViewStickyNote;
+export default handleUpdateStickyNote;
