@@ -28,6 +28,14 @@ export function isEventSticky(sticky: StickyNode): boolean {
   );
 }
 
+export function isViewSticky(sticky: StickyNode): boolean {
+  return (
+    Array.isArray(sticky.fills) &&
+    sticky.fills.length > 0 &&
+    isColorMatch((sticky.fills as SolidPaint[])[0].color, GREEN_COLOR)
+  );
+}
+
 function isColorMatch(color1: RGB, color2: RGB): boolean {
   return (
     Math.abs(color1.r - color2.r) <= COLOR_TOLERANCE &&

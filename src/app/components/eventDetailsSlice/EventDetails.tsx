@@ -17,7 +17,7 @@ function EventDetails({ connectedStickies, data, id }: StickyDetails) {
   }, []);
 
   const updateStickyNote = () => {
-    dispatch(ActionTypes.UpdateEventStickyNote, { stickyNoteData, id });
+    dispatch(ActionTypes.UpdateEventStickyNote, { stickyNoteData: stickyNoteData, id: id });
   };
 
   return (

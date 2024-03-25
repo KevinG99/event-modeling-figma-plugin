@@ -34,6 +34,7 @@ export enum ActionTypes {
   NothingSelected = 'nothing-selected',
   SectionSelected = 'section-selected',
   UpdateEventStickyNote = 'update-event',
+  UpdateViewStickyNote = 'update-view',
   CreateViewStickyNote = 'create-view',
   VerifyEventModel = 'verify-event-model',
 }

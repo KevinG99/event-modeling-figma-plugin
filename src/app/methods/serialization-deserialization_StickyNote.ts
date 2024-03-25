@@ -6,7 +6,7 @@ export function deserializeStickyNoteData(content: string): StickyNoteData {
   let properties = [];
 
   // Splitting the content safely
-  const splitContent = content.split(STICKY_SEPARATOR.replace(/\n/g, ' '))
+  const splitContent = content.split(STICKY_SEPARATOR.trim());
   if (splitContent.length > 0) {
     name = splitContent[0].trim();
   }
@@ -41,7 +41,6 @@ export function deserializeStickyNoteData(content: string): StickyNoteData {
     properties,
   };
 }
-
 
 
 export function serializeStickyNoteData(msg: StickyNoteData) {

@@ -6,7 +6,7 @@ import { dispatch } from '../../methods/uiMessageHandler';
 import StickyNodeOverview from '../eventDetailsSlice/StickyConnections';
 
 function ViewDetails({data, connectedStickies }: StickyDetails) {
-  const initialStickyNoteData: StickyNoteData = {'name': '', 'properties': []};
+  const initialStickyNoteData: StickyNoteData = {name: '', properties: []};
   const [stickyNoteData, setStickyNoteData] = useState(initialStickyNoteData);
 
   const handleStickyNoteChange = (serializedData: string) => {
@@ -18,7 +18,7 @@ function ViewDetails({data, connectedStickies }: StickyDetails) {
   }, []);
 
   const updateStickyNote = () => {
-    dispatch(ActionTypes.UpdateEventStickyNote, stickyNoteData);
+    dispatch(ActionTypes.UpdateViewStickyNote, { stickyNoteData: stickyNoteData });
   };
 
   return (

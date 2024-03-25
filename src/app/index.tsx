@@ -39,15 +39,12 @@ handleEvent(ActionTypes.StickyNoteSelected, (details : StickyDetails) => {
   }
 });
 
-handleEvent(ActionTypes.VerifyEventModel, (data) => {
-  allConnectors = data.allConnectors;
-  allStickies = data.allStickies;
-})
 
-handleEvent(ActionTypes.NothingSelected, () => {
+
+handleEvent(ActionTypes.NothingSelected, (data) => {
   reactPageRoot.render(
     <>
-      <VerifyEventModel allConnectors={allConnectors} allStickies={allStickies}/>
+      <VerifyEventModel allConnectors={data.allConnectors} allStickies={data.allStickies}/>
       <App />
     </>,
   );

@@ -1,22 +1,19 @@
 import React from 'react';
 import { ConnectedStickiesInfo, StickyNoteData } from '../../types';
 
-function StickyNodeOverview (connectedStickiesInfo: ConnectedStickiesInfo)  {
+function StickyNodeOverview(connectedStickiesInfo: ConnectedStickiesInfo) {
   const renderStickyNoteData = (stickyNoteData: StickyNoteData[]) => {
     return stickyNoteData.map((data, index) => (
-      <div key={index} style={{ marginBottom: '10px' }}>
-        <h4>{data.name}</h4>
+      <div key={index} style={{ marginBottom: '5px' }}>
         <ul>
-          {data.properties.map((prop, propIndex) => (
-            <li key={propIndex}>{prop.name}: {prop.type} {prop.defaultValue ? `(Default: ${prop.defaultValue})` : ''}</li>
-          ))}
+          <li>{data.name}</li>
         </ul>
       </div>
     ));
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
       <section>
         <h3>Events</h3>
         {renderStickyNoteData(connectedStickiesInfo.event)}

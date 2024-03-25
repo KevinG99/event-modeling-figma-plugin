@@ -7,6 +7,7 @@ import handleCreateBulkEvents from '../app/components/bulkDataSlice/bulkEvents';
 import handleCreateViewStickyNote from '../app/components/createViewSlice/viewCreation';
 import { deserializeStickyNoteData } from '../app/methods/serialization-deserialization_StickyNote';
 import { determineStickyType } from '../app/methods/helpers';
+import handleUpdateViewStickyNote from '../app/components/viewDetailsSlice/updateViews';
 
 figma.showUI(__html__);
 
@@ -73,8 +74,9 @@ function categorizeAndListConnectedStickies(selectedStickyNode: StickyNode, allS
 handleEvent(ActionTypes.CreateEventStickyNote, handleCreateEventStickyNote);
 handleEvent(ActionTypes.CreateCommandStickyNote, handleCreateCommandStickyNote);
 handleEvent(ActionTypes.CreateBulkEvents, handleCreateBulkEvents);
-handleEvent(ActionTypes.UpdateEventStickyNote, handleUpdateEventStickyNote);
 handleEvent(ActionTypes.CreateViewStickyNote, handleCreateViewStickyNote);
+handleEvent(ActionTypes.UpdateEventStickyNote, handleUpdateEventStickyNote);
+handleEvent(ActionTypes.UpdateViewStickyNote, handleUpdateViewStickyNote);
 
 
 
