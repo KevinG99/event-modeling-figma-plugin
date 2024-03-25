@@ -28,8 +28,8 @@ Event Modeling is a method of describing systems using an example of how informa
 #### Folder Structure
 To keep the codebase clean, we have the following folder structure:
 
-- To add new handlers and features use [controller.ts](./src/plugin/controller.ts)
-- To add new components use [components](./src/app/components) folder.
+- To add new handlers for features use [controller.ts](./src/plugin/controller.ts)
+- To add new components for features use [components](./src/app/components) folder.
 - In [methods](./src/app/methods) you can find some helper methods and default values.
 - Read more on the [Figma API Overview](https://www.figma.com/plugin-docs/api/api-overview/).
 
