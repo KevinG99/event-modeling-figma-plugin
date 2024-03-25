@@ -1,4 +1,4 @@
-import { BLUE_COLOR, COLOR_TOLERANCE, GREEN_COLOR, ORANGE_COLOR } from '../../plugin/defaults';
+import { BLUE_COLOR, COLOR_TOLERANCE, GREEN_COLOR, ORANGE_COLOR } from './defaults';
 import { StickyType } from '../types';
 
 export async function getOrangeStickies() {
@@ -11,30 +11,6 @@ export async function getOrangeStickies() {
   ) as SceneNode[];
 }
 
-
-export function isCommandStickyNote(sticky: StickyNode): boolean {
-  return (
-    Array.isArray(sticky.fills) &&
-    sticky.fills.length > 0 &&
-    isColorMatch((sticky.fills as SolidPaint[])[0].color, BLUE_COLOR)
-  );
-}
-
-export function isEventSticky(sticky: StickyNode): boolean {
-  return (
-    Array.isArray(sticky.fills) &&
-    sticky.fills.length > 0 &&
-    isColorMatch((sticky.fills as SolidPaint[])[0].color, ORANGE_COLOR)
-  );
-}
-
-export function isViewSticky(sticky: StickyNode): boolean {
-  return (
-    Array.isArray(sticky.fills) &&
-    sticky.fills.length > 0 &&
-    isColorMatch((sticky.fills as SolidPaint[])[0].color, GREEN_COLOR)
-  );
-}
 
 function isColorMatch(color1: RGB, color2: RGB): boolean {
   return (

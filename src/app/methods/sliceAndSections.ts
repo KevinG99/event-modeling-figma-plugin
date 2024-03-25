@@ -1,5 +1,6 @@
-import { isCommandStickyNote } from './helpers';
+import { determineStickyType } from './stickyHelper';
 import { deserializeStickyNoteData } from './serialization-deserialization_StickyNote';
+import { StickyType } from '../types';
 
 function createSliceName(name: string): string {
   return `slice: ${name}`;
@@ -29,9 +30,7 @@ export function moveStickyToSection(sceneNode: SceneNode, section?: SectionNode)
   const padding = 50; // Space between stickies
   const gridWidth = sceneNode.width + padding;
   const gridHeight = sceneNode.height + padding;
-
-  const isBlue = isCommandStickyNote(sceneNode as StickyNode);
-
+  const isBlue = determineStickyType(sceneNode as StickyNode) === StickyType.Event;
   let nextX = padding;
   let nextY = padding;
 

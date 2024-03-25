@@ -1,4 +1,4 @@
-import { GREEN_COLOR } from '../../../plugin/defaults';
+import { GREEN_COLOR } from '../../methods/defaults';
 import { connectStickyNotes, moveStickyToSection } from '../../methods/sliceAndSections';
 import { StickyNoteData } from '../../types';
 import { serializeStickyNoteData } from '../../methods/serialization-deserialization_StickyNote';

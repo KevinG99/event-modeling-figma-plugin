@@ -1,6 +1,6 @@
 import { StickyNoteData } from '../../types';
 import { moveStickyToSection } from '../../methods/sliceAndSections';
-import { ORANGE_COLOR } from '../../../plugin/defaults';
+import { ORANGE_COLOR } from '../../methods/defaults';
 import { serializeStickyNoteData } from '../../methods/serialization-deserialization_StickyNote';
 
 export default handleCreateEventStickyNote;

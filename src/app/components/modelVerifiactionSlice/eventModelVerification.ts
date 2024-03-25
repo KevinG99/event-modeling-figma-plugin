@@ -1,4 +1,4 @@
-import { determineStickyType } from '../../methods/helpers';
+import { determineStickyType } from '../../methods/stickyHelper';
 import { StickyType, StickyNoteData } from '../../types';
 import { deserializeStickyNoteData } from '../../methods/serialization-deserialization_StickyNote';
 

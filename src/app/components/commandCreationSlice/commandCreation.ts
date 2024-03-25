@@ -1,6 +1,6 @@
-import { getOrangeStickies } from '../../methods/helpers';
+import { getOrangeStickies } from '../../methods/stickyHelper';
 import { connectStickyNotes, moveStickyToSection } from '../../methods/sliceAndSections';
-import { BLUE_COLOR, STICKY_SEPARATOR } from '../../../plugin/defaults';
+import { BLUE_COLOR, STICKY_SEPARATOR } from '../../methods/defaults';
 
 export default handleCreateCommandStickyNote;
 

@@ -1,5 +1,5 @@
 import { StickyNoteData } from '../types';
-import { STICKY_SEPARATOR } from '../../plugin/defaults';
+import { STICKY_SEPARATOR } from './defaults';
 
 export function deserializeStickyNoteData(content: string): StickyNoteData {
   let name = '';

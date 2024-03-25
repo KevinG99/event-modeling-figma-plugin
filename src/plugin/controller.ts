@@ -6,7 +6,7 @@ import handleCreateCommandStickyNote from '../app/components/commandCreationSlic
 import handleCreateBulkEvents from '../app/components/bulkDataSlice/bulkEvents';
 import handleCreateViewStickyNote from '../app/components/createViewSlice/viewCreation';
 import { deserializeStickyNoteData } from '../app/methods/serialization-deserialization_StickyNote';
-import { determineStickyType } from '../app/methods/helpers';
+import { determineStickyType } from '../app/methods/stickyHelper';
 import handleUpdateViewStickyNote from '../app/components/viewDetailsSlice/updateViews';
 
 figma.showUI(__html__);
