@@ -25,8 +25,13 @@ Event Modeling is a method of describing systems using an example of how informa
 - Run `yarn build:watch` to start webpack in watch mode.
 - Open `Figma` -> `Plugins` -> `Development` -> `Import plugin from manifest...` and choose `manifest.json` file from this repo.
 
-⭐ To interact with the Figma API edit [controller.ts](./src/plugin/controller.ts).  
-⭐ Read more on the [Figma API Overview](https://www.figma.com/plugin-docs/api/api-overview/).
+#### Folder Structure
+To keep the codebase clean, we have the following folder structure:
+
+- To add new handlers and features use [controller.ts](./src/plugin/controller.ts)
+- To add new components use [components](./src/app/components) folder.
+- In [methods](./src/app/methods) you can find some helper methods and default values.
+- Read more on the [Figma API Overview](https://www.figma.com/plugin-docs/api/api-overview/).
 
 ## Toolings
 
