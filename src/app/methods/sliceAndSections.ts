@@ -30,7 +30,7 @@ export function moveStickyToSection(sceneNode: SceneNode, section?: SectionNode)
   const padding = 50; // Space between stickies
   const gridWidth = sceneNode.width + padding;
   const gridHeight = sceneNode.height + padding;
-  const isBlue = determineStickyType(sceneNode as StickyNode) === StickyType.Event;
+  const isBlue = determineStickyType(sceneNode as StickyNode) === StickyType.Command;
   let nextX = padding;
   let nextY = padding;
 

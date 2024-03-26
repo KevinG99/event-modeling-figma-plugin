@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { serializeStickyNoteData } from '../../methods/serialization-deserialization_StickyNote';
+import { STICKY_SEPARATOR } from '../../methods/defaults';
 
 function StickyNotePreview({ name, properties, onSerializedDataChange }) {
-  // Manage the raw input as local state
+  // Assume STICKY_SEPARATOR is defined outside this component
   const [inputValue, setInputValue] = useState('');
-  // Use the serialized data for the initial value or updates
   const serializedData = name ? serializeStickyNoteData({ name, properties }) : '';
 
   useEffect(() => {
@@ -12,7 +12,18 @@ function StickyNotePreview({ name, properties, onSerializedDataChange }) {
   }, [serializedData]);
 
   const handleChange = (event) => {
-    setInputValue(event.target.value);
+    let value = event.target.value;
+    const lines = value.split('\n');
+    const lastLine = lines[lines.length - 1];
+
+    // Check if the last character entered is a newline and the last line does not end with the STICKY_SEPARATOR
+    if (value.endsWith('\n') && !value.includes(STICKY_SEPARATOR.trim())) {
+      // Add STICKY_SEPARATOR to the last line
+      lines[lines.length - 1] = lastLine + STICKY_SEPARATOR;
+      value = lines
+    }
+
+    setInputValue(value);
   };
 
   const handleBlur = () => {
